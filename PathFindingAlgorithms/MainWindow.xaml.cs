@@ -40,7 +40,5 @@ namespace PathFindingAlgorithms
             GroupBoxSettings.Visibility = Visibility.Collapsed;
 
         }
-
-
     }
 }
