@@ -35,7 +35,7 @@
                     <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplySettings_Click"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Algorithm" Margin="10" Name="GroupBoxAlgorithm" DockPanel.Dock="Top">
+            <GroupBox Header="Algorithm" Margin="10" Name="GroupBoxAlgorithm" DockPanel.Dock="Top" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
                     <Label Content="Name:"/>
                     <Label Content="" Name="LabelAlgorithmName" Padding="0,5"/>

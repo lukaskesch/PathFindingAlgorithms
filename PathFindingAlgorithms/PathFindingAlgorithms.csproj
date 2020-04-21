@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AStar.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="Dijkstra.cs" />
     <Compile Include="File.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -72,6 +73,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
