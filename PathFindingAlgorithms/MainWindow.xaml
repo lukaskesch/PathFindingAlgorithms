@@ -28,10 +28,12 @@
                     <Label Content="MaxY:" Margin="10,0,0,0"/>
                     <TextBox Name="TextBoxMaxY" Width="30" Height="20"/>
                     <Label Content="Visualization:" Margin="50,0,0,0"/>
-                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label Content="Delay:" Margin="50,0,0,0"/>
-                    <TextBox Name="TextBoxDelay" Text="100" Width="30" Height="20"/>
-                    <Label Content="ms"/>
+                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True" Checked="CheckBoxVisualization_Checked" Unchecked="CheckBoxVisualization_Unchecked"/>
+                    <StackPanel Orientation="Horizontal" Name="StackPanelDelay">
+                        <Label Content="Delay:" Margin="50,0,0,0"/>
+                        <TextBox Name="TextBoxDelay" Text="100" Width="30" Height="20"/>
+                        <Label Content="ms"/>
+                    </StackPanel>
                     <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplySettings_Click"/>
                 </StackPanel>
             </GroupBox>
@@ -44,7 +46,7 @@
 
                 </StackPanel>
             </GroupBox>
-            <Canvas Name="CanvasPath"/>
+            <Canvas Name="CanvasPath" Margin="10"/>
         </DockPanel>
     </Grid>
 </Window>

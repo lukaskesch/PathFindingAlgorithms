@@ -58,6 +58,14 @@ namespace PathFindingAlgorithms
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i + 1, j]);
                     }
+                    if (j > 0 && !ObstacleNodes.Contains(AllNodes[i, j - 1]))
+                    {
+                        AllNodes[i, j].Neighboors.Add(AllNodes[i, j - 1]);
+                    }
+                    if (j < MaxY - 1 && !ObstacleNodes.Contains(AllNodes[i, j + 1]))
+                    {
+                        AllNodes[i, j].Neighboors.Add(AllNodes[i, j + 1]);
+                    }
                 }
             }
         }

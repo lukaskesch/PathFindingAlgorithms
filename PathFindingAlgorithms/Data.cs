@@ -11,5 +11,15 @@ namespace PathFindingAlgorithms
     {
         Node[,] AllNodes;
         List<Node> ObstacleNodes;
+
+        enum CalculationMode { Fast, Slow }
+        CalculationMode calculationMode;
+        int CalculationDelay;
+
+        double dx, dy;
+        int MaxX, MaxY;
+
+        enum ApplicationMode { NoGrid, Drawing, FinishedAlgorithm }
+        ApplicationMode applicationMode;
     }
 }
