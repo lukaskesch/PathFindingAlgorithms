@@ -27,7 +27,7 @@ namespace PathFindingAlgorithms
         {
             InitializeComponent();
             applicationMode = ApplicationMode.NoGrid;
-            editMode = EditMode.Nothing;
+            drawingMode = DrawingMode.Nothing;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -97,6 +97,7 @@ namespace PathFindingAlgorithms
                     MaxX = _MaxX;
                     MaxY = _MaxY;
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
+                    applicationMode = ApplicationMode.ReadyForDrawing;
                     SetScale();
                     DrawCoordinateSystem();
                 }
@@ -130,28 +131,28 @@ namespace PathFindingAlgorithms
         private void MenuItemAddObstacles_Checked(object sender, RoutedEventArgs e)
         {
             MenuItemRemoveObstacles.IsChecked = false;
-            editMode = EditMode.AddObstacle;
+            drawingMode = DrawingMode.AddObstacle;
         }
         private void MenuItemObstacles_Unchecked(object sender, RoutedEventArgs e)
         {
-            editMode = EditMode.Nothing;
+            drawingMode = DrawingMode.Nothing;
         }
         private void MenuItemRemoveObstacles_Checked(object sender, RoutedEventArgs e)
         {
             MenuItemAddObstacles.IsChecked = false;
-            editMode = EditMode.RemoveObstacle;
+            drawingMode = DrawingMode.RemoveObstacle;
         }
         private void MenuItemSetStartpoint_Click(object sender, RoutedEventArgs e)
         {
             MenuItemAddObstacles.IsChecked = false;
             MenuItemRemoveObstacles.IsChecked = false;
-            editMode = EditMode.SetStartpoint;
+            drawingMode = DrawingMode.SetStartpoint;
         }
         private void MenuItemSetEndpoint_Click(object sender, RoutedEventArgs e)
         {
             MenuItemAddObstacles.IsChecked = false;
             MenuItemRemoveObstacles.IsChecked = false;
-            editMode = EditMode.SetEndpoint;
+            drawingMode = DrawingMode.SetEndpoint;
         }
         #endregion
 
@@ -159,16 +160,54 @@ namespace PathFindingAlgorithms
         #region Canvas
         private void CanvasPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (applicationMode != ApplicationMode.Drawing || editMode == EditMode.Nothing)
-            {
-                return;
-            }
+            editMode = EditMode.Final;
+            EditPoint(e);
         }
         private void CanvasPath_MouseMove(object sender, MouseEventArgs e)
         {
-            if (applicationMode != ApplicationMode.Drawing || editMode == EditMode.Nothing)
+            editMode = EditMode.Preview;
+            EditPoint(e);
+        }
+        private void EditPoint(MouseEventArgs e)
+        {
+            if (applicationMode != ApplicationMode.ReadyForDrawing || drawingMode == DrawingMode.Nothing)
             {
                 return;
+            }
+            Point P = e.GetPosition(CanvasPath);
+            PlotToCoordinateSystem(ref P);
+            MessageBox.Show("(" + P.X + ";" + P.Y + ")");
+
+            if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
+            {
+                //Löschen
+            }
+
+            if (editMode == EditMode.Final)
+            {
+                Node N = new Node(P.X, P.Y);
+                if (drawingMode == DrawingMode.AddObstacle)
+                {
+                    if (!ObstacleNodes.Contains(N))
+                    {
+                        ObstacleNodes.Add(N);
+                    }
+                }
+                else if (drawingMode == DrawingMode.RemoveObstacle)
+                {
+                    if (ObstacleNodes.Contains(N))
+                    {
+                        ObstacleNodes.Remove(N);
+                    }
+                }
+                else if (drawingMode == DrawingMode.SetStartpoint)
+                {
+                    StartNode = N;
+                }
+                else if (drawingMode == DrawingMode.SetEndpoint)
+                {
+                    EndNode = N;
+                }
             }
         }
         #endregion

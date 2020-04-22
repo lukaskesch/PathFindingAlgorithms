@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PathFindingAlgorithms"
         mc:Ignorable="d"
-        Title="Pathfinding-Algorithms" Height="400" MinHeight="400" Width="600" MinWidth="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged">
+        Title="Pathfinding-Algorithms" Height="400" MinHeight="400" Width="600" MinWidth="600" WindowStartupLocation="CenterScreen" 
+        Loaded="Window_Loaded" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged" MouseLeftButtonDown="CanvasPath_MouseLeftButtonDown"
+        MouseMove="CanvasPath_MouseMove">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">

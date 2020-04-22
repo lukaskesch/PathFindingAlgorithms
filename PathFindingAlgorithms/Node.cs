@@ -9,7 +9,7 @@ namespace PathFindingAlgorithms
     class Node
     {
         //Object
-        int X, Y;
+        double X, Y;
 
         bool Visited;
         bool Obstacle;
@@ -17,7 +17,7 @@ namespace PathFindingAlgorithms
         Node PriorNode;
         List<Node> Neighboors;
 
-        public Node(int _X, int _Y)
+        public Node(double _X, double _Y)
         {
             X = _X;
             Y = _Y;

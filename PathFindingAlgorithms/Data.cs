@@ -11,6 +11,8 @@ namespace PathFindingAlgorithms
     {
         Node[,] AllNodes;
         List<Node> ObstacleNodes;
+        Node StartNode;
+        Node EndNode;
 
         enum CalculationMode { Fast, Slow }
         CalculationMode calculationMode;
@@ -19,10 +21,13 @@ namespace PathFindingAlgorithms
         double dx, dy;
         int MaxX, MaxY;
 
-        enum ApplicationMode { NoGrid, Drawing, FinishedAlgorithm }
+        enum ApplicationMode { NoGrid, ReadyForDrawing, FinishedAlgorithm }
         ApplicationMode applicationMode;
 
-        enum EditMode { Nothing, AddObstacle, RemoveObstacle, SetStartpoint, SetEndpoint }
+        enum DrawingMode { Nothing, AddObstacle, RemoveObstacle, SetStartpoint, SetEndpoint }
+        DrawingMode drawingMode;
+
+        enum EditMode { Preview, Final }
         EditMode editMode;
     }
 }
