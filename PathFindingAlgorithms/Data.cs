@@ -21,5 +21,8 @@ namespace PathFindingAlgorithms
 
         enum ApplicationMode { NoGrid, Drawing, FinishedAlgorithm }
         ApplicationMode applicationMode;
+
+        enum EditMode { Nothing, AddObstacle, RemoveObstacle, SetStartpoint, SetEndpoint }
+        EditMode editMode;
     }
 }

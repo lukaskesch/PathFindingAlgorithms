@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PathFindingAlgorithms
 {
@@ -20,12 +22,49 @@ namespace PathFindingAlgorithms
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Window
         public MainWindow()
         {
             InitializeComponent();
             applicationMode = ApplicationMode.NoGrid;
+            editMode = EditMode.Nothing;
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            GroupBoxSettings.Visibility = Visibility.Collapsed;
+            MenuItemEdit.IsEnabled = false;
+            MenuItemSettings.IsEnabled = false;
+            MenuItemAlgorithms.IsEnabled = false;
+        }
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RedrawCanvas();
+        }
+        #endregion
 
+
+        #region File
+        private void MenuItemFileCreate_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItemSettings.IsEnabled = true;
+            GroupBoxSettings.Visibility = Visibility.Visible;
+        }
+        private void MenuItemFileLoad_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+            MenuItemSettings.IsEnabled = true;
+            MenuItemEdit.IsEnabled = true;
+            MenuItemAlgorithms.IsEnabled = true;
+        }
+        private void MenuItemFileSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Settings
         private void MenuItemSettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxSettings.Visibility = Visibility.Visible;
@@ -42,11 +81,16 @@ namespace PathFindingAlgorithms
         private void ButtonApplySettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxSettings.Visibility = Visibility.Collapsed;
+            Wait(GroupBoxSettings, 1);
+
             try
             {
                 int _MaxX, _MaxY;
                 _MaxX = int.Parse(TextBoxMaxX.Text);
                 _MaxY = int.Parse(TextBoxMaxY.Text);
+
+                MenuItemEdit.IsEnabled = true;
+                MenuItemAlgorithms.IsEnabled = true;
 
                 if (MaxX != _MaxX || MaxY != _MaxY)
                 {
@@ -59,7 +103,6 @@ namespace PathFindingAlgorithms
             }
             catch (Exception)
             {
-                throw;
                 MessageBox.Show("Coordinates are invalid");
             }
 
@@ -79,14 +122,58 @@ namespace PathFindingAlgorithms
             {
                 calculationMode = CalculationMode.Fast;
             }
-
         }
+        #endregion
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+
+        #region MenuItemsEdit
+        private void MenuItemAddObstacles_Checked(object sender, RoutedEventArgs e)
         {
-            GroupBoxSettings.Visibility = Visibility.Collapsed;
+            MenuItemRemoveObstacles.IsChecked = false;
+            editMode = EditMode.AddObstacle;
         }
+        private void MenuItemObstacles_Unchecked(object sender, RoutedEventArgs e)
+        {
+            editMode = EditMode.Nothing;
+        }
+        private void MenuItemRemoveObstacles_Checked(object sender, RoutedEventArgs e)
+        {
+            MenuItemAddObstacles.IsChecked = false;
+            editMode = EditMode.RemoveObstacle;
+        }
+        private void MenuItemSetStartpoint_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItemAddObstacles.IsChecked = false;
+            MenuItemRemoveObstacles.IsChecked = false;
+            editMode = EditMode.SetStartpoint;
+        }
+        private void MenuItemSetEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItemAddObstacles.IsChecked = false;
+            MenuItemRemoveObstacles.IsChecked = false;
+            editMode = EditMode.SetEndpoint;
+        }
+        #endregion
 
+
+        #region Canvas
+        private void CanvasPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (applicationMode != ApplicationMode.Drawing || editMode == EditMode.Nothing)
+            {
+                return;
+            }
+        }
+        private void CanvasPath_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (applicationMode != ApplicationMode.Drawing || editMode == EditMode.Nothing)
+            {
+                return;
+            }
+        }
+        #endregion
+
+        #region Drawing
         private void SetScale()
         {
             dx = CanvasPath.ActualWidth / MaxX;
@@ -100,7 +187,7 @@ namespace PathFindingAlgorithms
         private void PlotToCoordinateSystem(ref Point P)
         {
             P.X = Math.Floor(P.X / dx);
-            P.Y = Math.Floor((MaxY - P.Y) / dy);
+            P.Y = Math.Floor(MaxY - (P.Y / dy));
         }
         private void DrawCoordinateSystem()
         {
@@ -140,6 +227,25 @@ namespace PathFindingAlgorithms
             };
             CanvasPath.Children.Add(line);
         }
+        private void RedrawCanvas()
+        {
+            if (MaxX != 0)
+            {
+                CanvasPath.Children.Clear();
+                SetScale();
+                DrawCoordinateSystem();
+            }
+        }
+        private void Wait(UIElement element, int CalculationDelay)
+        {
+            Action DummyAction = DoNothing;
+            Thread.Sleep(CalculationDelay);
+            element.Dispatcher.Invoke(DispatcherPriority.Input, DummyAction);
+        }
+        private void DoNothing()
+        { }
+
+        #endregion
 
 
     }

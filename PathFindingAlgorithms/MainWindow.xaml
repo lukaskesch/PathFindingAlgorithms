@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PathFindingAlgorithms"
         mc:Ignorable="d"
-        Title="Pathfinding-Algorithms" Height="400" MinHeight="400" Width="600" MinWidth="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" SizeToContent="WidthAndHeight">
+        Title="Pathfinding-Algorithms" Height="400" MinHeight="400" Width="600" MinWidth="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -15,8 +15,14 @@
                     <MenuItem Name="MenuItemFileSave" Header="Save" Click="MenuItemFileSave_Click"/>
                     <MenuItem Name="MenuItemFileSaveAs" Header="Save As" Click="MenuItemFileSave_Click"/>
                 </MenuItem>
+                <MenuItem Name="MenuItemEdit" Header="Edit">
+                    <MenuItem Name="MenuItemAddObstacles" Header="Add Obstacles" IsCheckable="True" Checked="MenuItemAddObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
+                    <MenuItem Name="MenuItemRemoveObstacles" Header="Remove Obstacles" IsCheckable="True" Checked="MenuItemRemoveObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
+                    <MenuItem Name="MenuItemSetStartpoint" Header="Set Startpoint" Click="MenuItemSetStartpoint_Click"/>
+                    <MenuItem Name="MenuItemSetEndpoint" Header="Set Endpoint" Click="MenuItemSetEndpoint_Click"/>
+                </MenuItem>
                 <MenuItem Name="MenuItemSettings" Header="Settings" Click="MenuItemSettings_Click"/>
-                <MenuItem Header="Algorithms">
+                <MenuItem Name="MenuItemAlgorithms" Header="Algorithms">
                     <MenuItem Name="MenuItemAStarAlgorithm" Header="A*" Click="MenuItemAStarAlgorithm_Click"/>
                     <MenuItem Name="MenuItemDijkstraAlgorithm" Header="Dijkstra" Click="MenuItemDijkstraAlgorithm_Click"/>
                 </MenuItem>
@@ -24,9 +30,9 @@
             <GroupBox DockPanel.Dock="Top" Header="Settings" Margin="10" Name="GroupBoxSettings" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
                     <Label Content="MaxX:"/>
-                    <TextBox Name="TextBoxMaxX" Width="30" Height="20" />
+                    <TextBox Name="TextBoxMaxX" Width="30" Height="20" Text="15"/>
                     <Label Content="MaxY:" Margin="10,0,0,0"/>
-                    <TextBox Name="TextBoxMaxY" Width="30" Height="20"/>
+                    <TextBox Name="TextBoxMaxY" Width="30" Height="20" Text="10"/>
                     <Label Content="Visualization:" Margin="50,0,0,0"/>
                     <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True" Checked="CheckBoxVisualization_Checked" Unchecked="CheckBoxVisualization_Unchecked"/>
                     <StackPanel Orientation="Horizontal" Name="StackPanelDelay">
@@ -46,7 +52,7 @@
 
                 </StackPanel>
             </GroupBox>
-            <Canvas Name="CanvasPath" Margin="10"/>
+            <Canvas Name="CanvasPath" Margin="10" MouseLeftButtonDown="CanvasPath_MouseLeftButtonDown" MouseMove="CanvasPath_MouseMove"/>
         </DockPanel>
     </Grid>
 </Window>
