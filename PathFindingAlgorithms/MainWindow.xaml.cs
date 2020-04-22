@@ -170,44 +170,94 @@ namespace PathFindingAlgorithms
         }
         private void EditPoint(MouseEventArgs e)
         {
+            CanvasPath.Children.Remove(TempRect);
             if (applicationMode != ApplicationMode.ReadyForDrawing || drawingMode == DrawingMode.Nothing)
             {
                 return;
             }
+
+
             Point P = e.GetPosition(CanvasPath);
             PlotToCoordinateSystem(ref P);
-            MessageBox.Show("(" + P.X + ";" + P.Y + ")");
+
+            if (P.X < 0 || P.X >= MaxX || P.Y < 0 || P.Y >= MaxY)
+            {
+                return;
+            }
+
+            PlotToCanvas(ref P);
+            //MessageBox.Show("(" + P.X + ";" + P.Y + ")");
+
+            TempRect.Height = dy - 1 * CoordinateLineWidth;
+            TempRect.Width = dx - 1 * CoordinateLineWidth;
+            Canvas.SetLeft(TempRect, P.X + 0.5 * CoordinateLineWidth);
+            Canvas.SetTop(TempRect, P.Y - dy + 0.5 * CoordinateLineWidth);
+            TempRect.Fill = Brushes.Black;
+            CanvasPath.Children.Add(TempRect);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                editMode = EditMode.Final;
+            }
 
             if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
             {
                 //Löschen
             }
 
+            switch (drawingMode)
+            {
+                case DrawingMode.AddObstacle:
+                    TempRect.Fill = Brushes.Black;
+                    break;
+                case DrawingMode.RemoveObstacle:
+                    TempRect.Fill = Brushes.Red;
+                    break;
+                case DrawingMode.SetStartpoint:
+                    TempRect.Fill = Brushes.Green;
+                    break;
+                case DrawingMode.SetEndpoint:
+                    TempRect.Fill = Brushes.Blue;
+                    break;
+                default:
+                    break;
+            }
+
+            if (editMode == EditMode.Preview)
+            {
+                TempRect.Opacity = 0.6;
+            }
             if (editMode == EditMode.Final)
             {
+                TempRect.Opacity = 1;
                 Node N = new Node(P.X, P.Y);
-                if (drawingMode == DrawingMode.AddObstacle)
+                switch (drawingMode)
                 {
-                    if (!ObstacleNodes.Contains(N))
-                    {
-                        ObstacleNodes.Add(N);
-                    }
+                    case DrawingMode.Nothing:
+                        break;
+                    case DrawingMode.AddObstacle:
+                        if (!ObstacleNodes.Contains(N))
+                        {
+                            ObstacleNodes.Add(N);
+                        }
+                        break;
+                    case DrawingMode.RemoveObstacle:
+                        if (ObstacleNodes.Contains(N))
+                        {
+                            ObstacleNodes.Remove(N);
+                            return;
+                        }
+                        break;
+                    case DrawingMode.SetStartpoint:
+                        StartNode = N;
+                        break;
+                    case DrawingMode.SetEndpoint:
+                        EndNode = N;
+                        break;
+                    default:
+                        break;
                 }
-                else if (drawingMode == DrawingMode.RemoveObstacle)
-                {
-                    if (ObstacleNodes.Contains(N))
-                    {
-                        ObstacleNodes.Remove(N);
-                    }
-                }
-                else if (drawingMode == DrawingMode.SetStartpoint)
-                {
-                    StartNode = N;
-                }
-                else if (drawingMode == DrawingMode.SetEndpoint)
-                {
-                    EndNode = N;
-                }
+
             }
         }
         #endregion
@@ -262,7 +312,7 @@ namespace PathFindingAlgorithms
                 X2 = P2.X,
                 Y2 = P2.Y,
                 Stroke = Brushes.Gray,
-                StrokeThickness = 3
+                StrokeThickness = CoordinateLineWidth
             };
             CanvasPath.Children.Add(line);
         }

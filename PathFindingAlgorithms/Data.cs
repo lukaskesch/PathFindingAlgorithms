@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
 
 namespace PathFindingAlgorithms
 {
     public partial class MainWindow : Window
     {
         Node[,] AllNodes;
-        List<Node> ObstacleNodes;
+        List<Node> ObstacleNodes = new List<Node>();
         Node StartNode;
         Node EndNode;
 
@@ -29,5 +30,8 @@ namespace PathFindingAlgorithms
 
         enum EditMode { Preview, Final }
         EditMode editMode;
+
+        Rectangle TempRect = new Rectangle();
+        int CoordinateLineWidth = 3;
     }
 }
