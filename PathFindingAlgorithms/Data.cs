@@ -33,6 +33,8 @@ namespace PathFindingAlgorithms
 
         Rectangle Rect = new Rectangle();
         Rectangle TempRect = new Rectangle();
+        Rectangle StartRect = new Rectangle();
+        Rectangle EndRect = new Rectangle();
         int CoordinateLineWidth = 3;
     }
 }

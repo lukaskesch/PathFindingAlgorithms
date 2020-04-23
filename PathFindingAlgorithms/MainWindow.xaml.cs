@@ -98,6 +98,7 @@ namespace PathFindingAlgorithms
                     MaxY = _MaxY;
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
                     applicationMode = ApplicationMode.ReadyForDrawing;
+                    CanvasPath.Children.Clear();
                     SetScale();
                     DrawCoordinateSystem();
                 }
@@ -171,56 +172,80 @@ namespace PathFindingAlgorithms
         private void EditPoint(MouseEventArgs e)
         {
             CanvasPath.Children.Remove(TempRect);
+
+            //Check if drawing is necessary
             if (applicationMode != ApplicationMode.ReadyForDrawing || drawingMode == DrawingMode.Nothing)
             {
                 return;
             }
 
-
+            //Convert mouseposition
             Point P = e.GetPosition(CanvasPath);
             PlotToCoordinateSystem(ref P);
 
+            //Check if mouseposition is in bound
             if (P.X < 0 || P.X >= MaxX || P.Y < 0 || P.Y >= MaxY)
             {
                 return;
             }
 
+            //Convert back to canvas
             PlotToCanvas(ref P);
-            //MessageBox.Show("(" + P.X + ";" + P.Y + ")");
+
+            //Prepare rectangles
             Rect = new Rectangle();
+            SetRectParameters(P, e);
+            CanvasPath.Children.Add(TempRect);
+
+            //Delete obstacle
+            if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
+            {
+                //Löschen
+            }
+
+            //Handle Point and Rectange
+            if (editMode == EditMode.Final)
+            {
+                HandlePointAndRectangle(P);
+
+                //Label lable = new Label()
+                //{
+                //    Content = "5",
+                //    FontSize = 10,
+                //    Foreground = Brushes.Red
+                //    //Height = 50,
+                //    //Width = 50
+                //};
+                //Canvas.SetLeft(lable, P.X + 0.5 * CoordinateLineWidth);
+                //Canvas.SetTop(lable, P.Y - dy + 0.5 * CoordinateLineWidth);
+                //CanvasPath.Children.Add(lable);
+            }
+        }
+        private void SetRectParameters(Point P, MouseEventArgs e)
+        {
             TempRect.Height = dy - 1 * CoordinateLineWidth;
             TempRect.Width = dx - 1 * CoordinateLineWidth;
             Canvas.SetLeft(TempRect, P.X + 0.5 * CoordinateLineWidth);
             Canvas.SetTop(TempRect, P.Y - dy + 0.5 * CoordinateLineWidth);
             TempRect.Fill = Brushes.Black;
             TempRect.Opacity = 0.6;
-            CanvasPath.Children.Add(TempRect);
+
+            Rect.Height = TempRect.Height;
+            Rect.Width = TempRect.Width;
+            Canvas.SetLeft(Rect, P.X + 0.5 * CoordinateLineWidth);
+            Canvas.SetTop(Rect, P.Y - dy + 0.5 * CoordinateLineWidth);
+            Rect.Fill = Brushes.Black;
+
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 editMode = EditMode.Final;
-
-                Rect.Height = TempRect.Height;
-                Rect.Width = TempRect.Width;
-                Canvas.SetLeft(Rect, P.X + 0.5 * CoordinateLineWidth);
-                Canvas.SetTop(Rect, P.Y - dy + 0.5 * CoordinateLineWidth);
-                Rect.Fill = TempRect.Fill;
-            }
-
-            if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
-            {
-                //Löschen
             }
 
             switch (drawingMode)
             {
-                case DrawingMode.AddObstacle:
-                    TempRect.Fill = Brushes.Black;
-                    Rect.Fill = Brushes.Black;
-                    break;
                 case DrawingMode.RemoveObstacle:
                     TempRect.Fill = Brushes.Red;
-                    Rect.Fill = Brushes.Red;
                     break;
                 case DrawingMode.SetStartpoint:
                     TempRect.Fill = Brushes.Green;
@@ -233,42 +258,60 @@ namespace PathFindingAlgorithms
                 default:
                     break;
             }
+        }
+        private void HandlePointAndRectangle(Point P)
+        {
+            PlotToCoordinateSystem(ref P);
+            Node node = new Node(P.X, P.Y);
 
-            if (editMode == EditMode.Final)
+            switch (drawingMode)
             {
-                Node N = new Node(P.X, P.Y);
-                switch (drawingMode)
-                {
-                    case DrawingMode.Nothing:
-                        break;
-                    case DrawingMode.AddObstacle:
-                        if (!ObstacleNodes.Contains(N))
-                        {
-                            ObstacleNodes.Add(N);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                        break;
-                    case DrawingMode.RemoveObstacle:
-                        if (ObstacleNodes.Contains(N))
-                        {
-                            ObstacleNodes.Remove(N);
-                            return;
-                        }
-                        break;
-                    case DrawingMode.SetStartpoint:
-                        StartNode = N;
-                        break;
-                    case DrawingMode.SetEndpoint:
-                        EndNode = N;
-                        break;
-                    default:
-                        break;
-                }
-                CanvasPath.Children.Add(Rect);
-
+                case DrawingMode.Nothing:
+                    break;
+                case DrawingMode.AddObstacle:
+                    if (!Node.CheckIfObstacleNodeAlreadyExist(ObstacleNodes, node))
+                    {
+                        ObstacleNodes.Add(node);
+                        CanvasPath.Children.Add(Rect);
+                    }
+                    break;
+                case DrawingMode.RemoveObstacle:
+                    if (Node.CheckIfObstacleNodeAlreadyExist(ObstacleNodes, node))
+                    {
+                        //Vermutlich eigene Methode schreiben
+                        ObstacleNodes.Remove(node);
+                    }
+                    break;
+                case DrawingMode.SetStartpoint:
+                    if (!CanvasPath.Children.Contains(StartRect))
+                    {
+                        StartRect = Rect;
+                        CanvasPath.Children.Add(StartRect);
+                    }
+                    else
+                    {
+                        CanvasPath.Children.Remove(StartRect);
+                        StartRect = Rect;
+                        CanvasPath.Children.Add(StartRect);
+                    }
+                    StartNode = node;
+                    break;
+                case DrawingMode.SetEndpoint:
+                    if (!CanvasPath.Children.Contains(EndRect))
+                    {
+                        EndRect = Rect;
+                        CanvasPath.Children.Add(EndRect);
+                    }
+                    else
+                    {
+                        CanvasPath.Children.Remove(EndRect);
+                        EndRect = Rect;
+                        CanvasPath.Children.Add(EndRect);
+                    }
+                    EndNode = node;
+                    break;
+                default:
+                    break;
             }
         }
         #endregion

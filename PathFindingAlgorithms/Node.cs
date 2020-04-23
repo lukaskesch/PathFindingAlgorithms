@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace PathFindingAlgorithms
 {
@@ -27,6 +28,10 @@ namespace PathFindingAlgorithms
             Neighboors = new List<Node>();
         }
 
+        public override string ToString()
+        {
+            return "(" + X + ";" + Y + ")";
+        }
 
         static int MaxX, MaxY;
         public static Node[,] FillNodesArray(int _MaxX, int _MaxY)
@@ -68,6 +73,39 @@ namespace PathFindingAlgorithms
                     }
                 }
             }
+        }
+        public static bool CheckIfObstacleNodeAlreadyExist(List<Node> list, Node node1)
+        {
+            foreach (Node node2 in list)
+            {
+                if (node1.X == node2.X && node1.Y == node2.Y)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static void ConvertObstacleListInNodesArray(List<Node> Obstacles, Node[,] Nodes)
+        {
+            foreach (Node node1 in Obstacles)
+            {
+                foreach (Node node2 in Nodes)
+                {
+                    if (node1.X == node2.X && node1.Y == node2.Y)
+                    {
+                        node2.Obstacle = true;
+                    }
+                }
+            }
+        }
+    }
+
+    class MyRectangeComparer : IComparer<Rectangle>
+    {
+        public int Compare(Rectangle x, Rectangle y)
+        {
+
+            throw new NotImplementedException();
         }
     }
 }

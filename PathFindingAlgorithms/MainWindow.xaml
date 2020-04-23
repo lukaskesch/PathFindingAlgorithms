@@ -47,7 +47,7 @@
             </GroupBox>
             <GroupBox Header="Algorithm" Margin="10" Name="GroupBoxAlgorithm" DockPanel.Dock="Top" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
-                    <Label Content="Name:"/>
+                    <Label Content="Name:" />
                     <Label Content="" Name="LabelAlgorithmName" Padding="0,5"/>
                     <Label Content="Runtime:" Margin="30,0,0,0"/>
                     <Label Content="" Name="LabelRuntime" Padding="0,5"/>
