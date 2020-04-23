@@ -187,17 +187,24 @@ namespace PathFindingAlgorithms
 
             PlotToCanvas(ref P);
             //MessageBox.Show("(" + P.X + ";" + P.Y + ")");
-
+            Rect = new Rectangle();
             TempRect.Height = dy - 1 * CoordinateLineWidth;
             TempRect.Width = dx - 1 * CoordinateLineWidth;
             Canvas.SetLeft(TempRect, P.X + 0.5 * CoordinateLineWidth);
             Canvas.SetTop(TempRect, P.Y - dy + 0.5 * CoordinateLineWidth);
             TempRect.Fill = Brushes.Black;
+            TempRect.Opacity = 0.6;
             CanvasPath.Children.Add(TempRect);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 editMode = EditMode.Final;
+
+                Rect.Height = TempRect.Height;
+                Rect.Width = TempRect.Width;
+                Canvas.SetLeft(Rect, P.X + 0.5 * CoordinateLineWidth);
+                Canvas.SetTop(Rect, P.Y - dy + 0.5 * CoordinateLineWidth);
+                Rect.Fill = TempRect.Fill;
             }
 
             if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
@@ -209,27 +216,26 @@ namespace PathFindingAlgorithms
             {
                 case DrawingMode.AddObstacle:
                     TempRect.Fill = Brushes.Black;
+                    Rect.Fill = Brushes.Black;
                     break;
                 case DrawingMode.RemoveObstacle:
                     TempRect.Fill = Brushes.Red;
+                    Rect.Fill = Brushes.Red;
                     break;
                 case DrawingMode.SetStartpoint:
                     TempRect.Fill = Brushes.Green;
+                    Rect.Fill = Brushes.Green;
                     break;
                 case DrawingMode.SetEndpoint:
                     TempRect.Fill = Brushes.Blue;
+                    Rect.Fill = Brushes.Blue;
                     break;
                 default:
                     break;
             }
 
-            if (editMode == EditMode.Preview)
-            {
-                TempRect.Opacity = 0.6;
-            }
             if (editMode == EditMode.Final)
             {
-                TempRect.Opacity = 1;
                 Node N = new Node(P.X, P.Y);
                 switch (drawingMode)
                 {
@@ -239,6 +245,10 @@ namespace PathFindingAlgorithms
                         if (!ObstacleNodes.Contains(N))
                         {
                             ObstacleNodes.Add(N);
+                        }
+                        else
+                        {
+                            return;
                         }
                         break;
                     case DrawingMode.RemoveObstacle:
@@ -257,6 +267,7 @@ namespace PathFindingAlgorithms
                     default:
                         break;
                 }
+                CanvasPath.Children.Add(Rect);
 
             }
         }

@@ -31,6 +31,7 @@ namespace PathFindingAlgorithms
         enum EditMode { Preview, Final }
         EditMode editMode;
 
+        Rectangle Rect = new Rectangle();
         Rectangle TempRect = new Rectangle();
         int CoordinateLineWidth = 3;
     }
