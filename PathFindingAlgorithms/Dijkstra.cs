@@ -11,7 +11,10 @@ namespace PathFindingAlgorithms
     {
         private void MenuItemDijkstraAlgorithm_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!PrepareAlgorithm())
+            {
+                return;
+            }
         }
     }
 }

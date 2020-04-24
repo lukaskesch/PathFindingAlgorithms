@@ -22,7 +22,7 @@ namespace PathFindingAlgorithms
         double dx, dy;
         int MaxX, MaxY;
 
-        enum ApplicationMode { NoGrid, ReadyForDrawing, FinishedAlgorithm }
+        enum ApplicationMode { SetMap, Drawing, Algorithm }
         ApplicationMode applicationMode;
 
         enum DrawingMode { Nothing, AddObstacle, RemoveObstacle, SetStartpoint, SetEndpoint }

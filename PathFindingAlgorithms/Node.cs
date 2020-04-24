@@ -49,25 +49,25 @@ namespace PathFindingAlgorithms
             }
             return Nodes;
         }
-        public static void FindAllNeighboors(Node[,] AllNodes, List<Node> ObstacleNodes)
+        public static void FindAllNeighboors(Node[,] AllNodes)
         {
             for (int i = 0; i < MaxX; i++)
             {
                 for (int j = 0; j < MaxY; j++)
                 {
-                    if (i > 0 && !ObstacleNodes.Contains(AllNodes[i - 1, j]))
+                    if (i > 0 && !AllNodes[i - 1, j].Obstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i - 1, j]);
                     }
-                    if (i < MaxX - 1 && !ObstacleNodes.Contains(AllNodes[i + 1, j]))
+                    if (i < MaxX - 1 && !AllNodes[i + 1, j].Obstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i + 1, j]);
                     }
-                    if (j > 0 && !ObstacleNodes.Contains(AllNodes[i, j - 1]))
+                    if (j > 0 && !AllNodes[i, j - 1].Obstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i, j - 1]);
                     }
-                    if (j < MaxY - 1 && !ObstacleNodes.Contains(AllNodes[i, j + 1]))
+                    if (j < MaxY - 1 && !AllNodes[i, j + 1].Obstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i, j + 1]);
                     }
@@ -94,6 +94,10 @@ namespace PathFindingAlgorithms
                     if (node1.X == node2.X && node1.Y == node2.Y)
                     {
                         node2.Obstacle = true;
+                    }
+                    else
+                    {
+                        node2.Obstacle = false;
                     }
                 }
             }

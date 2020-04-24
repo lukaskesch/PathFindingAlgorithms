@@ -26,7 +26,7 @@ namespace PathFindingAlgorithms
         public MainWindow()
         {
             InitializeComponent();
-            applicationMode = ApplicationMode.NoGrid;
+            applicationMode = ApplicationMode.SetMap;
             drawingMode = DrawingMode.Nothing;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -97,7 +97,7 @@ namespace PathFindingAlgorithms
                     MaxX = _MaxX;
                     MaxY = _MaxY;
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
-                    applicationMode = ApplicationMode.ReadyForDrawing;
+                    applicationMode = ApplicationMode.Drawing;
                     CanvasPath.Children.Clear();
                     SetScale();
                     DrawCoordinateSystem();
@@ -174,7 +174,7 @@ namespace PathFindingAlgorithms
             CanvasPath.Children.Remove(TempRect);
 
             //Check if drawing is necessary
-            if (applicationMode != ApplicationMode.ReadyForDrawing || drawingMode == DrawingMode.Nothing)
+            if (applicationMode != ApplicationMode.Drawing || drawingMode == DrawingMode.Nothing)
             {
                 return;
             }
