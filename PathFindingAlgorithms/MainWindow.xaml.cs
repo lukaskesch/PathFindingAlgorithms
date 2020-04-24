@@ -49,18 +49,30 @@ namespace PathFindingAlgorithms
         private void MenuItemFileCreate_Click(object sender, RoutedEventArgs e)
         {
             MenuItemSettings.IsEnabled = true;
-
             GroupBoxSettings.Visibility = Visibility.Visible;
         }
         private void MenuItemFileLoad_Click(object sender, RoutedEventArgs e)
         {
+            string FileContent = ReadFile();
+            if (FileContent == string.Empty)
+            {
+                MessageBox.Show("File is corrupt", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            if (!LoadFile(FileContent))
+            {
+                MessageBox.Show("File is corrupt", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             MenuItemFileSave.IsEnabled = true;
             MenuItemFileSaveAs.IsEnabled = true;
             MenuItemSettings.IsEnabled = true;
             MenuItemEdit.IsEnabled = true;
             MenuItemAlgorithms.IsEnabled = true;
+
+            MessageBox.Show(FileContent);
         }
         private void MenuItemFileSave_Click(object sender, RoutedEventArgs e)
         {
@@ -70,6 +82,8 @@ namespace PathFindingAlgorithms
             string Map = string.Empty;
             Map += MaxX.ToString();
             Map += Environment.NewLine + MaxY.ToString();
+            Map += Environment.NewLine + StartNode.ToString();
+            Map += Environment.NewLine + EndNode.ToString();
             foreach (Node obstacle in ObstacleNodes)
             {
                 Map += Environment.NewLine + obstacle.ToString();
@@ -130,9 +144,11 @@ namespace PathFindingAlgorithms
 
                 SaveFileDialog Dlg = new SaveFileDialog();
                 Dlg.Title = "Save Map";
-                Dlg.DefaultExt = ".txt";
-                Dlg.Filter = "Text documents (.txt)|*.txt";
-                Dlg.FileName = "Beispiel.txt";
+                Dlg.DefaultExt = ".map";
+                //Dlg.DefaultExt = ".txt";
+                Dlg.Filter = "Maps (.map)|*.map";
+                //Dlg.Filter = "Text documents (.txt)|*.txt";
+                Dlg.FileName = "Beispiel.map";
                 Dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Maps";
 
                 bool? result = Dlg.ShowDialog();
@@ -152,7 +168,41 @@ namespace PathFindingAlgorithms
                 streamWriter.Close();
             }
         }
+        private string ReadFile()
+        {
+            OpenFileDialog Dlg = new OpenFileDialog();
+            Dlg.Title = "Save Map";
+            //Dlg.DefaultExt = ".txt";
+            Dlg.DefaultExt = ".map";
+            //Dlg.Filter = "Text documents (.txt)|*.txt";
+            Dlg.Filter = "Map (.map)|*.map";
+            Dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Maps";
 
+            bool? result = Dlg.ShowDialog();
+
+            if (result != true)
+            {
+                return string.Empty;
+            }
+
+            FilePath = Dlg.FileName;
+            StreamReader streamReader = new StreamReader(FilePath);
+
+            string FileContent;
+            try
+            {
+                FileContent = streamReader.ReadToEnd();
+            }
+            finally
+            {
+                streamReader.Close();
+            }
+            return FileContent;
+        }
+        private bool LoadFile(string FileContent)
+        {
+            return true;
+        }
         #endregion
 
         #region Settings
