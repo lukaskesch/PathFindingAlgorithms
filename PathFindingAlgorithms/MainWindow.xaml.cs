@@ -64,7 +64,8 @@ namespace PathFindingAlgorithms
         }
         private void MenuItemFileSave_Click(object sender, RoutedEventArgs e)
         {
-            CheckIfSaveFileIsPossible(sender);
+            MenuItem menuItem = (MenuItem)sender;
+            CheckIfSaveFileIsPossible(menuItem);
 
             string Map = string.Empty;
             Map += MaxX.ToString();
@@ -74,12 +75,18 @@ namespace PathFindingAlgorithms
                 Map += Environment.NewLine + obstacle.ToString();
             }
 
-            SaveFile(sender, Map);
+            if (menuItem.Name == MenuItemFileSaveAs.Name || FilePath == string.Empty)
+            {
+                FileSave(menuItem, Map);
+            }
+            else if (menuItem.Name == MenuItemFileSave.Name)
+            {
+                FileSave(menuItem, Map);
+            }
         }
-        private bool CheckIfSaveFileIsPossible(object sender)
+        private bool CheckIfSaveFileIsPossible(MenuItem menuItem)
         {
             //Check
-            MenuItem menuItem = (MenuItem)sender;
             if (StartNode == null || EndNode == null)
             {
                 MessageBox.Show("Start and/or Endpoint is missing", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -105,16 +112,16 @@ namespace PathFindingAlgorithms
             }
             if (menuItem.Name == MenuItemFileSave.Name && FilePath == string.Empty)
             {
-                MessageBox.Show("The file hasn't been saved yet." + Environment.NewLine + "In order to save the file for the first time press \"save\".",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                //MessageBox.Show("The file hasn't been saved yet." + Environment.NewLine + "In order to save the file for the first time press \"save\".",
+                //    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //return false;
+
             }
             return true;
         }
-        private void SaveFile(object sender, string FileContent)
+        private void FileSave(MenuItem menuItem, string FileContent)
         {
-            MenuItem menuItem = (MenuItem)sender;
-            if (menuItem.Name == MenuItemFileSaveAs.Name)
+            if (menuItem.Name == MenuItemFileSaveAs.Name || FilePath == string.Empty)
             {
                 if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Maps"))
                 {
@@ -129,20 +136,23 @@ namespace PathFindingAlgorithms
                 Dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Maps";
 
                 bool? result = Dlg.ShowDialog();
-                if (result == true)
+                if (!result == true)
                 {
-                    StreamWriter streamWriter = new StreamWriter(Dlg.FileName, false);
-                    try
-                    {
-                        streamWriter.Write(FileContent);
-                    }
-                    finally
-                    {
-                        streamWriter.Close();
-                    }
+                    return;
                 }
+                FilePath = Dlg.FileName;
+            }
+            StreamWriter streamWriter = new StreamWriter(FilePath, false);
+            try
+            {
+                streamWriter.Write(FileContent);
+            }
+            finally
+            {
+                streamWriter.Close();
             }
         }
+
         #endregion
 
         #region Settings
