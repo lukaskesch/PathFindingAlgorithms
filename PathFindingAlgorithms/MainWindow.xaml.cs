@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -47,20 +49,99 @@ namespace PathFindingAlgorithms
         private void MenuItemFileCreate_Click(object sender, RoutedEventArgs e)
         {
             MenuItemSettings.IsEnabled = true;
+
             GroupBoxSettings.Visibility = Visibility.Visible;
         }
         private void MenuItemFileLoad_Click(object sender, RoutedEventArgs e)
         {
 
 
-
+            MenuItemFileSave.IsEnabled = true;
+            MenuItemFileSaveAs.IsEnabled = true;
             MenuItemSettings.IsEnabled = true;
             MenuItemEdit.IsEnabled = true;
             MenuItemAlgorithms.IsEnabled = true;
         }
         private void MenuItemFileSave_Click(object sender, RoutedEventArgs e)
         {
+            CheckIfSaveFileIsPossible(sender);
 
+            string Map = string.Empty;
+            Map += MaxX.ToString();
+            Map += Environment.NewLine + MaxY.ToString();
+            foreach (Node obstacle in ObstacleNodes)
+            {
+                Map += Environment.NewLine + obstacle.ToString();
+            }
+
+            SaveFile(sender, Map);
+        }
+        private bool CheckIfSaveFileIsPossible(object sender)
+        {
+            //Check
+            MenuItem menuItem = (MenuItem)sender;
+            if (StartNode == null || EndNode == null)
+            {
+                MessageBox.Show("Start and/or Endpoint is missing", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else if (StartNode.X == EndNode.X && StartNode.Y == EndNode.Y)
+            {
+                MessageBox.Show("Start and Endpoint are the same", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else if (ObstacleNodes.Count == 0)
+            {
+                string title = "Continue ?";
+                string message = "You havn't set any obstacles. Do you still want to save the map?";
+                MessageBoxButton messageBoxButton = MessageBoxButton.YesNo;
+                MessageBoxImage messageBoxImage = MessageBoxImage.Question;
+                MessageBoxResult dialogResult = MessageBox.Show(message, title, messageBoxButton, messageBoxImage);
+
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return false;
+                }
+            }
+            if (menuItem.Name == MenuItemFileSave.Name && FilePath == string.Empty)
+            {
+                MessageBox.Show("The file hasn't been saved yet." + Environment.NewLine + "In order to save the file for the first time press \"save\".",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+        private void SaveFile(object sender, string FileContent)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            if (menuItem.Name == MenuItemFileSaveAs.Name)
+            {
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Maps"))
+                {
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Maps");
+                }
+
+                SaveFileDialog Dlg = new SaveFileDialog();
+                Dlg.Title = "Save Map";
+                Dlg.DefaultExt = ".txt";
+                Dlg.Filter = "Text documents (.txt)|*.txt";
+                Dlg.FileName = "Beispiel.txt";
+                Dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Maps";
+
+                bool? result = Dlg.ShowDialog();
+                if (result == true)
+                {
+                    StreamWriter streamWriter = new StreamWriter(Dlg.FileName, false);
+                    try
+                    {
+                        streamWriter.Write(FileContent);
+                    }
+                    finally
+                    {
+                        streamWriter.Close();
+                    }
+                }
+            }
         }
         #endregion
 
@@ -91,6 +172,8 @@ namespace PathFindingAlgorithms
 
                 MenuItemEdit.IsEnabled = true;
                 MenuItemAlgorithms.IsEnabled = true;
+                MenuItemFileSave.IsEnabled = true;
+                MenuItemFileSaveAs.IsEnabled = true;
 
                 if (MaxX != _MaxX || MaxY != _MaxY)
                 {

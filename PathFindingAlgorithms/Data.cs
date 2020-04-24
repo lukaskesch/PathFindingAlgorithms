@@ -12,7 +12,7 @@ namespace PathFindingAlgorithms
     {
         Node[,] AllNodes;
         List<Node> ObstacleNodes = new List<Node>();
-        Node StartNode;
+        Node StartNode = new Node(-1, -1);
         Node EndNode;
 
         enum CalculationMode { Fast, Slow }
@@ -36,5 +36,7 @@ namespace PathFindingAlgorithms
         Rectangle StartRect = new Rectangle();
         Rectangle EndRect = new Rectangle();
         int CoordinateLineWidth = 3;
+
+        string FilePath = string.Empty;
     }
 }

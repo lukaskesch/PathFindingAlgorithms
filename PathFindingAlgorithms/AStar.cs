@@ -22,7 +22,12 @@ namespace PathFindingAlgorithms
             //Check
             if (StartNode == null || EndNode == null)
             {
-                MessageBox.Show("Start and/or Endpoint is missing");
+                MessageBox.Show("Start and/or Endpoint is missing", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else if (StartNode.X == EndNode.X && StartNode.Y == EndNode.Y)
+            {
+                MessageBox.Show("Start and Endpoint are the same", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             else if (ObstacleNodes.Count == 0)

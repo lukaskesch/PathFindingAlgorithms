@@ -10,13 +10,13 @@ namespace PathFindingAlgorithms
     class Node
     {
         //Object
-        double X, Y;
+        public readonly double X, Y;
 
-        bool Visited;
-        bool Obstacle;
+        public bool Visited;
+        public bool Obstacle;
 
-        Node PriorNode;
-        List<Node> Neighboors;
+        public Node PriorNode;
+        public readonly List<Node> Neighboors;
 
         public Node(double _X, double _Y)
         {

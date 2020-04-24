@@ -14,8 +14,8 @@
                 <MenuItem Header="File">
                     <MenuItem Name="MenuItemFileCreate" Header="Create" Click="MenuItemFileCreate_Click"/>
                     <MenuItem Name="MenuItemFileLoad" Header="Load" Click="MenuItemFileLoad_Click"/>
-                    <MenuItem Name="MenuItemFileSave" Header="Save" Click="MenuItemFileSave_Click"/>
-                    <MenuItem Name="MenuItemFileSaveAs" Header="Save As" Click="MenuItemFileSave_Click"/>
+                    <MenuItem Name="MenuItemFileSave" Header="Save" Click="MenuItemFileSave_Click" IsEnabled="False"/>
+                    <MenuItem Name="MenuItemFileSaveAs" Header="Save As" Click="MenuItemFileSave_Click" IsEnabled="False"/>
                 </MenuItem>
                 <MenuItem Name="MenuItemEdit" Header="Edit">
                     <MenuItem Name="MenuItemAddObstacles" Header="Add Obstacles" IsCheckable="True" Checked="MenuItemAddObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
