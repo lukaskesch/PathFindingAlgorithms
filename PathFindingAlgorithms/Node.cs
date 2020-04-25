@@ -7,11 +7,17 @@ using System.Windows.Shapes;
 
 namespace PathFindingAlgorithms
 {
-    class Node
+    public class Node : IComparable<Node>
     {
         //Object
+        public readonly int Index;
         public readonly double X, Y;
 
+        public double DistanceToStart;
+        public double EstimatedDistanceToEnd;
+        public double Score;
+
+        public bool Found;
         public bool Visited;
         public bool Obstacle;
 
@@ -22,15 +28,31 @@ namespace PathFindingAlgorithms
         {
             X = _X;
             Y = _Y;
-            Visited = false;
-            Obstacle = false;
             PriorNode = null;
             Neighboors = new List<Node>();
+            Index = -1;
         }
-
+        public Node(double _X, double _Y, int Index)
+        {
+            X = _X;
+            Y = _Y;
+            PriorNode = null;
+            Neighboors = new List<Node>();
+            this.Index = Index;
+        }
+        public double GetDistanceBetween(Node node)
+        {
+            return Math.Sqrt(Math.Pow(this.X - node.X, 2) + Math.Pow(this.Y - node.Y, 2));
+        }
         public override string ToString()
         {
             return "(" + X + ";" + Y + ")";
+        }
+        public int CompareTo(Node other)
+        {
+            if (this.Score < other.Score) return -1;
+            else if (this.Score > other.Score) return 1;
+            else return 0;
         }
 
         static int MaxX, MaxY;
@@ -44,7 +66,7 @@ namespace PathFindingAlgorithms
             {
                 for (int j = 0; j < MaxY; j++)
                 {
-                    Nodes[i, j] = new Node(i, j);
+                    Nodes[i, j] = new Node(i, j, i * MaxY + j);
                 }
             }
             return Nodes;

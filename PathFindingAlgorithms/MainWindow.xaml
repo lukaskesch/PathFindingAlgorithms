@@ -25,8 +25,8 @@
                 </MenuItem>
                 <MenuItem Name="MenuItemSettings" Header="Settings" Click="MenuItemSettings_Click"/>
                 <MenuItem Name="MenuItemAlgorithms" Header="Algorithms">
-                    <MenuItem Name="MenuItemAStarAlgorithm" Header="A*" Click="MenuItemAStarAlgorithm_Click"/>
-                    <MenuItem Name="MenuItemDijkstraAlgorithm" Header="Dijkstra" Click="MenuItemDijkstraAlgorithm_Click"/>
+                    <MenuItem Name="MenuItemAStarAlgorithm" Header="A*" Click="MenuItemAlgorithm_Click"/>
+                    <MenuItem Name="MenuItemDijkstraAlgorithm" Header="Dijkstra" Click="MenuItemAlgorithm_Click"/>
                 </MenuItem>
             </Menu>
             <GroupBox DockPanel.Dock="Top" Header="Settings" Margin="10" Name="GroupBoxSettings" Visibility="Collapsed">

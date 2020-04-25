@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Priority_Queue;
+using PriorityQueues;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,11 @@ namespace PathFindingAlgorithms
         List<Node> ObstacleNodes = new List<Node>();
         Node StartNode = new Node(-1, -1);
         Node EndNode;
+
+        enum Algorithm { AStart, Dijkstra }
+        Algorithm algorithm;
+
+        SimplePriorityQueue<Node> UnvisitedNodes = new SimplePriorityQueue<Node>();
 
         enum CalculationMode { Fast, Slow }
         CalculationMode calculationMode;

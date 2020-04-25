@@ -437,7 +437,7 @@ namespace PathFindingAlgorithms
                         StartRect = Rect;
                         CanvasPath.Children.Add(StartRect);
                     }
-                    StartNode = node;
+                    StartNode = AllNodes[(int)(node.X), (int)(node.Y)];
                     break;
                 case DrawingMode.SetEndpoint:
                     if (!CanvasPath.Children.Contains(EndRect))
@@ -451,7 +451,8 @@ namespace PathFindingAlgorithms
                         EndRect = Rect;
                         CanvasPath.Children.Add(EndRect);
                     }
-                    EndNode = node;
+                    EndNode = AllNodes[(int)(node.X), (int)(node.Y)];
+                    //EndNode = node;
                     break;
                 default:
                     break;
