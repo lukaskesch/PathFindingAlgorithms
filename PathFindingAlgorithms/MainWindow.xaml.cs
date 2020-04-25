@@ -240,10 +240,12 @@ namespace PathFindingAlgorithms
                     MaxX = _MaxX;
                     MaxY = _MaxY;
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
+                    Rectangles = FillRectangeArray();
                     applicationMode = ApplicationMode.Drawing;
                     CanvasPath.Children.Clear();
                     SetScale();
                     DrawCoordinateSystem();
+                    UpdateRectangeArray();
                 }
             }
             catch (Exception)
@@ -366,17 +368,17 @@ namespace PathFindingAlgorithms
         }
         private void SetRectParameters(Point P, MouseEventArgs e)
         {
-            TempRect.Height = dy - 1 * CoordinateLineWidth;
-            TempRect.Width = dx - 1 * CoordinateLineWidth;
-            Canvas.SetLeft(TempRect, P.X + 0.5 * CoordinateLineWidth);
-            Canvas.SetTop(TempRect, P.Y - dy + 0.5 * CoordinateLineWidth);
+            TempRect.Height = dy - 1.5 * CoordinateLineWidth;
+            TempRect.Width = dx - 1.5 * CoordinateLineWidth;
+            Canvas.SetLeft(TempRect, P.X + CoordinateLineWidth);
+            Canvas.SetTop(TempRect, P.Y - dy + CoordinateLineWidth);
             TempRect.Fill = Brushes.Black;
             TempRect.Opacity = 0.6;
 
             Rect.Height = TempRect.Height;
             Rect.Width = TempRect.Width;
-            Canvas.SetLeft(Rect, P.X + 0.5 * CoordinateLineWidth);
-            Canvas.SetTop(Rect, P.Y - dy + 0.5 * CoordinateLineWidth);
+            Canvas.SetLeft(Rect, P.X + 0.75 * CoordinateLineWidth);
+            Canvas.SetTop(Rect, P.Y - dy + 0.75 * CoordinateLineWidth);
             Rect.Fill = Brushes.Black;
 
 
@@ -520,8 +522,50 @@ namespace PathFindingAlgorithms
             {
                 CanvasPath.Children.Clear();
                 SetScale();
+                UpdateRectangeArray();
                 DrawCoordinateSystem();
             }
+        }
+        private void UpdateRectangeArray()
+        {
+            Point P;
+            Rectangle rectangle;
+
+            for (int i = 0; i < MaxX; i++)
+            {
+                for (int j = 0; j < MaxY; j++)
+                {
+                    P = new Point(i, j);
+                    rectangle = Rectangles[i, j];
+
+                    PlotToCanvas(ref P);
+
+                    rectangle.Height = dy - 1.5 * CoordinateLineWidth;
+                    rectangle.Width = dx - 1.5 * CoordinateLineWidth;
+                    Canvas.SetLeft(rectangle, P.X + CoordinateLineWidth);
+                    Canvas.SetTop(rectangle, P.Y - dy + CoordinateLineWidth);
+
+                    CanvasPath.Children.Add(rectangle);
+                }
+            }
+        }
+        private Rectangle[,] FillRectangeArray()
+        {
+            Rectangle[,] rectangles = new Rectangle[MaxX, MaxY];
+
+            for (int i = 0; i < MaxX; i++)
+            {
+                for (int j = 0; j < MaxY; j++)
+                {
+                    rectangles[i, j] = new Rectangle()
+                    {
+                        Opacity = 0.1,
+                        Fill = Brushes.Gray
+                    };
+                }
+            }
+
+            return rectangles;
         }
         private void Wait(UIElement element, int CalculationDelay)
         {

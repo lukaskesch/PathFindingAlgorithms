@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 
 namespace PathFindingAlgorithms
 {
-    public class Node : IComparable<Node>
+    public class Node //: IComparable<Node>
     {
         //Object
         public readonly int Index;
@@ -32,14 +32,7 @@ namespace PathFindingAlgorithms
             Neighboors = new List<Node>();
             Index = -1;
         }
-        public Node(double _X, double _Y, int Index)
-        {
-            X = _X;
-            Y = _Y;
-            PriorNode = null;
-            Neighboors = new List<Node>();
-            this.Index = Index;
-        }
+
         public double GetDistanceBetween(Node node)
         {
             return Math.Sqrt(Math.Pow(this.X - node.X, 2) + Math.Pow(this.Y - node.Y, 2));
@@ -48,12 +41,12 @@ namespace PathFindingAlgorithms
         {
             return "(" + X + ";" + Y + ")";
         }
-        public int CompareTo(Node other)
-        {
-            if (this.Score < other.Score) return -1;
-            else if (this.Score > other.Score) return 1;
-            else return 0;
-        }
+        //public int CompareTo(Node other)
+        //{
+        //    if (this.Score < other.Score) return -1;
+        //    else if (this.Score > other.Score) return 1;
+        //    else return 0;
+        //}
 
         static int MaxX, MaxY;
         public static Node[,] FillNodesArray(int _MaxX, int _MaxY)
@@ -66,7 +59,7 @@ namespace PathFindingAlgorithms
             {
                 for (int j = 0; j < MaxY; j++)
                 {
-                    Nodes[i, j] = new Node(i, j, i * MaxY + j);
+                    Nodes[i, j] = new Node(i, j);
                 }
             }
             return Nodes;
@@ -123,15 +116,6 @@ namespace PathFindingAlgorithms
                     }
                 }
             }
-        }
-    }
-
-    class MyRectangeComparer : IComparer<Rectangle>
-    {
-        public int Compare(Rectangle x, Rectangle y)
-        {
-
-            throw new NotImplementedException();
         }
     }
 }
