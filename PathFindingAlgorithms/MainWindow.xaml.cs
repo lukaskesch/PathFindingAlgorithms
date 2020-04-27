@@ -321,18 +321,12 @@ namespace PathFindingAlgorithms
         }
         private void EditPoint(MouseEventArgs e)
         {
-            //Reset old point
-            if (TempRect.Fill == Brushes.Gray)
-            {
-                Rect.Fill = TempRect.Fill;
-                Rect.Opacity = 0.1;
-            }
-            else
-            {
-                Rect.Fill = TempRect.Fill;
-                Rect.Opacity = 1;
-            }
+            //Set old color
+            Rect.Fill = TempRect.Fill;
 
+            //Set old opacity
+            if (TempRect.Fill == Brushes.Gray) Rect.Opacity = TempRect.Opacity;
+            else Rect.Opacity = TempRect.Opacity;
 
             //Check if drawing is necessary
             if (applicationMode != ApplicationMode.Drawing || drawingMode == DrawingMode.Nothing)
@@ -354,10 +348,27 @@ namespace PathFindingAlgorithms
             Rect = Rectangles[(int)P.X, (int)P.Y];
 
             //Save prior color
+            TempRect.Opacity = 0.1;
             TempRect.Fill = Brushes.Gray;
-            if (Rect.Fill == Brushes.Black) TempRect.Fill = Brushes.Black;
-            if (Rect.Fill == Brushes.Green) TempRect.Fill = Brushes.Green;
-            //if (Rect.Fill == Brushes.Red) TempRect.Fill = Brushes.Red;
+            if (Rect.Fill == Brushes.Black) { TempRect.Fill = Brushes.Black; TempRect.Opacity = 1; }
+            if (Rect.Fill == Brushes.Green) { TempRect.Fill = Brushes.Green; TempRect.Opacity = 1; }
+            if (Rect.Fill == Brushes.Red) { TempRect.Fill = Brushes.Red; TempRect.Opacity = 1; };
+
+            //Only allow gray or black background
+            if (Rect.Fill != Brushes.Gray && Rect.Fill != Brushes.Black)
+            {
+                return;
+            }
+            //For remove obstacle only allow black background
+            if (drawingMode == DrawingMode.RemoveObstacle && Rect.Fill == Brushes.Gray)
+            {
+                return;
+            }
+            //For add obstacle, add startpoint, or add enpoint only allow gray background
+            if (drawingMode != DrawingMode.RemoveObstacle && Rect.Fill == Brushes.Black)
+            {
+                return;
+            }
 
             //Set Rect
             Rect.Opacity = 0.6;
@@ -367,13 +378,13 @@ namespace PathFindingAlgorithms
             //Delete obstacle
             if (drawingMode == DrawingMode.RemoveObstacle && editMode == EditMode.Final)
             {
-                //Löschen
-                return;
-                //if (Node.CheckIfObstacleNodeAlreadyExist(ObstacleNodes, node))
-                //{
-                //    //Vermutlich eigene Methode schreiben
+                TempRect.Fill = Brushes.Gray;
+                TempRect.Opacity = 0.1;
+
+                //Vermutlich eigene Methode schreiben
                 //    ObstacleNodes.Remove(node);
-                //}
+
+                return;
             }
 
             //Handle Point and Rectange
@@ -381,6 +392,7 @@ namespace PathFindingAlgorithms
             {
                 TempRect.Fill = Rect.Fill;
                 Rect.Opacity = 1;
+                TempRect.Opacity = 1;
 
                 HandlePointAndRectangle(P);
 
@@ -428,38 +440,19 @@ namespace PathFindingAlgorithms
 
             switch (drawingMode)
             {
-                case DrawingMode.Nothing:
-                    break;
                 case DrawingMode.AddObstacle:
-                    if (!Node.CheckIfObstacleNodeAlreadyExist(ObstacleNodes, node))
-                    {
-                        ObstacleNodes.Add(node);
-                    }
+                    ObstacleNodes.Add(node);
                     break;
-
                 case DrawingMode.SetStartpoint:
-                    if (!CanvasPath.Children.Contains(StartRect))
-                    {
-                        StartRect = TempRect;
-                    }
-                    else
-                    {
-                        StartRect = TempRect;
-                    }
+                    StartRect.Fill = Brushes.Gray;
+                    StartRect.Opacity = 0.1;
+                    StartRect = Rect;
                     StartNode = AllNodes[(int)(node.X), (int)(node.Y)];
                     break;
                 case DrawingMode.SetEndpoint:
-                    if (!CanvasPath.Children.Contains(EndRect))
-                    {
-                        EndRect = TempRect;
-                        CanvasPath.Children.Add(EndRect);
-                    }
-                    else
-                    {
-                        CanvasPath.Children.Remove(EndRect);
-                        EndRect = TempRect;
-                        CanvasPath.Children.Add(EndRect);
-                    }
+                    EndRect.Fill = Brushes.Gray;
+                    EndRect.Opacity = 0.1;
+                    EndRect = Rect;
                     EndNode = AllNodes[(int)(node.X), (int)(node.Y)];
                     break;
                 default:
