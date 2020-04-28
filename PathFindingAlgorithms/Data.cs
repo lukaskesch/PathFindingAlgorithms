@@ -24,7 +24,7 @@ namespace PathFindingAlgorithms
         enum CalculationMode { Fast, Slow }
         CalculationMode calculationMode;
         int CalculationDelay;
-        SimplePriorityQueue<Node> UnvisitedNodes = new SimplePriorityQueue<Node>();
+        SimplePriorityQueue<Node> UnvisitedNodes;
 
 
         //Scaling

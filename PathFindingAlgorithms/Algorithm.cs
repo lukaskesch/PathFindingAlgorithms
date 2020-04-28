@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Priority_Queue;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace PathFindingAlgorithms
             }
 
             Prepare(sender);
+            UnvisitedNodes = new SimplePriorityQueue<Node>();
 
             Node CurrentNode = StartNode;
             while (CurrentNode != EndNode)
@@ -118,7 +120,45 @@ namespace PathFindingAlgorithms
         }
         private void UpdateNeigboorDijkstra(Node Current, Node Neighboor)
         {
+            //Check if neighboor has been visited or is an obstacle
+            if (Neighboor.IsVisited || Neighboor.IsObstacle)
+            {
+                return;
+            }
 
+            bool BetterScore;
+            double DistanceToStart;
+
+            //Calculate new score
+            BetterScore = false;
+            DistanceToStart = Current.DistanceToStart + Current.GetDistanceBetween(Neighboor);
+
+            //May update old score
+            if (Neighboor.DistanceToStart > DistanceToStart)
+            {
+                BetterScore = true;
+                Neighboor.DistanceToStart = DistanceToStart;
+                Neighboor.PriorNode = Current;
+            }
+
+            //Check if neighboor has been found yet
+            if (!Neighboor.IsFound)
+            {
+                Neighboor.IsFound = true;
+                UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.DistanceToStart);
+
+                //Mark node in canvas
+                if (Neighboor != EndNode)
+                    Rectangles[(int)Neighboor.X, (int)Neighboor.Y].Opacity = 0.4;
+                if (calculationMode == CalculationMode.Slow)
+                    Wait(Rectangles[(int)Neighboor.X, (int)Neighboor.Y], CalculationDelay);
+            }
+
+            //Update priority if new score is lower
+            else if (Neighboor.IsFound && BetterScore)
+            {
+                UnvisitedNodes.UpdatePriority(Neighboor, (float)Neighboor.DistanceToStart);
+            }
         }
         private bool CheckData()
         {
