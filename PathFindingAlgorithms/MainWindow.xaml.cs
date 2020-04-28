@@ -209,6 +209,7 @@ namespace PathFindingAlgorithms
         private void MenuItemSettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxSettings.Visibility = Visibility.Visible;
+            MenuItemEdit_Click(sender, e);
         }
         private void CheckBoxVisualization_Checked(object sender, RoutedEventArgs e)
         {
@@ -385,8 +386,7 @@ namespace PathFindingAlgorithms
                 TempRect.Fill = Brushes.Gray;
                 TempRect.Opacity = 0.1;
 
-                //Vermutlich eigene Methode schreiben
-                //    ObstacleNodes.Remove(node);
+                AllNodes[(int)P.X, (int)P.Y].IsObstacle = false; ;
 
                 return;
             }
@@ -445,7 +445,7 @@ namespace PathFindingAlgorithms
             switch (drawingMode)
             {
                 case DrawingMode.AddObstacle:
-                    node.Obstacle = true;
+                    node.IsObstacle = true;
                     break;
                 case DrawingMode.SetStartpoint:
                     StartRect.Fill = Brushes.Gray;
@@ -596,8 +596,8 @@ namespace PathFindingAlgorithms
         { }
 
 
-        #endregion
 
+        #endregion
 
     }
 }

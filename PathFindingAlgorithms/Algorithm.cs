@@ -13,6 +13,8 @@ namespace PathFindingAlgorithms
     {
         private void MenuItemAlgorithm_Click(object sender, RoutedEventArgs e)
         {
+            MenuItemEdit_Click(sender, e);
+
             if (!CheckData())
             {
                 return;
@@ -23,12 +25,12 @@ namespace PathFindingAlgorithms
             Node CurrentNode = StartNode;
             while (CurrentNode != EndNode)
             {
-                CurrentNode.Visited = true;
+                CurrentNode.IsVisited = true;
 
                 //Iterate through neighboors
                 foreach (Node NeighboorNode in CurrentNode.Neighboors)
                 {
-                    if (NeighboorNode.Obstacle)
+                    if (NeighboorNode.IsObstacle)
                         continue;
                     if (algorithm == Algorithm.AStart)
                         UpdateNeighboorAStar(CurrentNode, NeighboorNode);
@@ -46,7 +48,7 @@ namespace PathFindingAlgorithms
 
                 //Mark it in canvas
                 if (CurrentNode != EndNode)
-                    Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Opacity = 0.5;
+                    Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Opacity = 0.7;
                 if (calculationMode == CalculationMode.Slow)
                     Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay);
             }
@@ -71,7 +73,7 @@ namespace PathFindingAlgorithms
         private void UpdateNeighboorAStar(Node Current, Node Neighboor)
         {
             //Check if neighboor has been visited or is an obstacle
-            if (Neighboor.Visited || Neighboor.Obstacle)
+            if (Neighboor.IsVisited || Neighboor.IsObstacle)
             {
                 return;
             }
@@ -96,20 +98,20 @@ namespace PathFindingAlgorithms
             }
 
             //Check if neighboor has been found yet
-            if (!Neighboor.Found)
+            if (!Neighboor.IsFound)
             {
-                Neighboor.Found = true;
+                Neighboor.IsFound = true;
                 UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.Score);
 
                 //Mark node in canvas
                 if (Neighboor != EndNode)
-                    Rectangles[(int)Neighboor.X, (int)Neighboor.Y].Opacity = 0.3;
+                    Rectangles[(int)Neighboor.X, (int)Neighboor.Y].Opacity = 0.4;
                 if (calculationMode == CalculationMode.Slow)
                     Wait(Rectangles[(int)Neighboor.X, (int)Neighboor.Y], CalculationDelay);
             }
 
             //Update priority if new score is lower
-            else if (Neighboor.Found && BetterScore)
+            else if (Neighboor.IsFound && BetterScore)
             {
                 UnvisitedNodes.UpdatePriority(Neighboor, (float)Neighboor.Score);
             }
@@ -131,7 +133,13 @@ namespace PathFindingAlgorithms
                 MessageBox.Show("Start and Endpoint are the same", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            else if (ObstacleNodes.Count == 0)
+            int NumberOfObstacles = 0;
+            foreach (Node node in AllNodes)
+            {
+                if (node.IsObstacle)
+                    NumberOfObstacles++;
+            }
+            if (NumberOfObstacles == 0)
             {
                 string title = "Continue ?";
                 string message = "You havn't set any obstacles. Do you still want to continue the algorithm?";
@@ -164,6 +172,8 @@ namespace PathFindingAlgorithms
 
             foreach (Node node in AllNodes)
             {
+                node.IsFound = false;
+                node.IsVisited = false;
                 node.DistanceToStart = double.MaxValue;
                 node.EstimatedDistanceToEnd = double.MaxValue;
                 node.Score = double.MaxValue;

@@ -17,9 +17,9 @@ namespace PathFindingAlgorithms
         public double EstimatedDistanceToEnd;
         public double Score;
 
-        public bool Found;
-        public bool Visited;
-        public bool Obstacle;
+        public bool IsFound;
+        public bool IsVisited;
+        public bool IsObstacle;
 
         public Node PriorNode;
         public readonly List<Node> Neighboors;
@@ -70,19 +70,19 @@ namespace PathFindingAlgorithms
             {
                 for (int j = 0; j < MaxY; j++)
                 {
-                    if (i > 0 && !AllNodes[i - 1, j].Obstacle)
+                    if (i > 0 && !AllNodes[i - 1, j].IsObstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i - 1, j]);
                     }
-                    if (i < MaxX - 1 && !AllNodes[i + 1, j].Obstacle)
+                    if (i < MaxX - 1 && !AllNodes[i + 1, j].IsObstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i + 1, j]);
                     }
-                    if (j > 0 && !AllNodes[i, j - 1].Obstacle)
+                    if (j > 0 && !AllNodes[i, j - 1].IsObstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i, j - 1]);
                     }
-                    if (j < MaxY - 1 && !AllNodes[i, j + 1].Obstacle)
+                    if (j < MaxY - 1 && !AllNodes[i, j + 1].IsObstacle)
                     {
                         AllNodes[i, j].Neighboors.Add(AllNodes[i, j + 1]);
                     }
@@ -108,11 +108,11 @@ namespace PathFindingAlgorithms
                 {
                     if (node1.X == node2.X && node1.Y == node2.Y)
                     {
-                        node2.Obstacle = true;
+                        node2.IsObstacle = true;
                     }
                     else
                     {
-                        node2.Obstacle = false;
+                        node2.IsObstacle = false;
                     }
                 }
             }

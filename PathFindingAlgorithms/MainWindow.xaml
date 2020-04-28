@@ -24,7 +24,7 @@
                     <MenuItem Name="MenuItemSetEndpoint" Header="Set Endpoint" Click="MenuItemSetEndpoint_Click"/>
                 </MenuItem>
                 <MenuItem Name="MenuItemSettings" Header="Settings" Click="MenuItemSettings_Click"/>
-                <MenuItem Name="MenuItemAlgorithms" Header="Algorithms">
+                <MenuItem Name="MenuItemAlgorithms" Header="Algorithms" >
                     <MenuItem Name="MenuItemAStarAlgorithm" Header="A*" Click="MenuItemAlgorithm_Click"/>
                     <MenuItem Name="MenuItemDijkstraAlgorithm" Header="Dijkstra" Click="MenuItemAlgorithm_Click"/>
                 </MenuItem>
