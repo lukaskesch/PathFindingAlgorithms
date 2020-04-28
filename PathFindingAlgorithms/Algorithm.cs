@@ -34,10 +34,10 @@ namespace PathFindingAlgorithms
                 {
                     if (NeighboorNode.IsObstacle)
                         continue;
-                    if (algorithm == Algorithm.AStart)
-                        UpdateNeighboorAStar(CurrentNode, NeighboorNode);
-                    else if (algorithm == Algorithm.Dijkstra)
-                        UpdateNeigboorDijkstra(CurrentNode, NeighboorNode);
+                    //if (algorithm == Algorithm.AStart)
+                    UpdateNeighboorAStar(CurrentNode, NeighboorNode);
+                    //else if (algorithm == Algorithm.Dijkstra)
+                    //    UpdateNeigboorDijkstra(CurrentNode, NeighboorNode);
                 }
 
                 //Pick next best unvisited node
@@ -90,7 +90,7 @@ namespace PathFindingAlgorithms
             GScore = DistanceToStart + DistnaceToEnd;
 
             //May update old score
-            if (Neighboor.Score > GScore)
+            if (algorithm == Algorithm.AStart && Neighboor.Score > GScore)
             {
                 BetterScore = true;
                 Neighboor.DistanceToStart = DistanceToStart;
@@ -98,12 +98,21 @@ namespace PathFindingAlgorithms
                 Neighboor.Score = GScore;
                 Neighboor.PriorNode = Current;
             }
+            else if (algorithm == Algorithm.Dijkstra && Neighboor.DistanceToStart > DistanceToStart)
+            {
+                BetterScore = true;
+                Neighboor.DistanceToStart = DistanceToStart;
+                Neighboor.PriorNode = Current;
+            }
 
             //Check if neighboor has been found yet
             if (!Neighboor.IsFound)
             {
                 Neighboor.IsFound = true;
-                UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.Score);
+                if (algorithm == Algorithm.AStart)
+                    UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.Score);
+                else if (algorithm == Algorithm.Dijkstra)
+                    UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.DistanceToStart);
 
                 //Mark node in canvas
                 if (Neighboor != EndNode)
@@ -115,9 +124,13 @@ namespace PathFindingAlgorithms
             //Update priority if new score is lower
             else if (Neighboor.IsFound && BetterScore)
             {
-                UnvisitedNodes.UpdatePriority(Neighboor, (float)Neighboor.Score);
+                if (algorithm == Algorithm.AStart)
+                    UnvisitedNodes.UpdatePriority(Neighboor, (float)Neighboor.Score);
+                else if (algorithm == Algorithm.Dijkstra)
+                    UnvisitedNodes.UpdatePriority(Neighboor, (float)Neighboor.DistanceToStart);
             }
         }
+        private void MarkNodeInCanvas() { }
         private void UpdateNeigboorDijkstra(Node Current, Node Neighboor)
         {
             //Check if neighboor has been visited or is an obstacle
