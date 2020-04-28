@@ -276,8 +276,11 @@ namespace PathFindingAlgorithms
         #region MenuItemsEdit
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
-            applicationMode = ApplicationMode.Drawing;
-            ResetArrayToBeforeAlgorithm();
+            if (applicationMode == ApplicationMode.Algorithm)
+            {
+                applicationMode = ApplicationMode.Drawing;
+                ResetArrayToBeforeAlgorithm();
+            }
         }
         private void MenuItemAddObstacles_Checked(object sender, RoutedEventArgs e)
         {
@@ -352,6 +355,7 @@ namespace PathFindingAlgorithms
             TempRect.Fill = Brushes.Gray;
             if (Rect.Fill == Brushes.Black) { TempRect.Fill = Brushes.Black; TempRect.Opacity = 1; }
             if (Rect.Fill == Brushes.Green) { TempRect.Fill = Brushes.Green; TempRect.Opacity = 1; }
+            if (Rect.Fill == Brushes.Blue) { TempRect.Fill = Brushes.Blue; TempRect.Opacity = 1; }
             if (Rect.Fill == Brushes.Red) { TempRect.Fill = Brushes.Red; TempRect.Opacity = 1; };
 
             //Only allow gray or black background
@@ -371,7 +375,7 @@ namespace PathFindingAlgorithms
             }
 
             //Set Rect
-            Rect.Opacity = 0.6;
+            Rect.Opacity = 0.8;
             SetRectColor(e);
 
 
@@ -436,24 +440,24 @@ namespace PathFindingAlgorithms
         }
         private void HandlePointAndRectangle(Point P)
         {
-            Node node = new Node(P.X, P.Y);
+            Node node = AllNodes[(int)P.X, (int)P.Y];
 
             switch (drawingMode)
             {
                 case DrawingMode.AddObstacle:
-                    ObstacleNodes.Add(node);
+                    node.Obstacle = true;
                     break;
                 case DrawingMode.SetStartpoint:
                     StartRect.Fill = Brushes.Gray;
                     StartRect.Opacity = 0.1;
                     StartRect = Rect;
-                    StartNode = AllNodes[(int)(node.X), (int)(node.Y)];
+                    StartNode = node;
                     break;
                 case DrawingMode.SetEndpoint:
                     EndRect.Fill = Brushes.Gray;
                     EndRect.Opacity = 0.1;
                     EndRect = Rect;
-                    EndNode = AllNodes[(int)(node.X), (int)(node.Y)];
+                    EndNode = node;
                     break;
                 default:
                     break;
@@ -552,7 +556,12 @@ namespace PathFindingAlgorithms
         {
             foreach (Rectangle rectangle in Rectangles)
             {
-                if ((rectangle.Fill == Brushes.Green || rectangle.Fill == Brushes.Red) && rectangle.Opacity != 1)
+                //if ((rectangle.Fill == Brushes.Green || rectangle.Fill == Brushes.Red) && rectangle.Opacity != 1)
+                //{
+                //    rectangle.Fill = Brushes.Gray;
+                //    rectangle.Opacity = 0.1;
+                //}
+                if (rectangle.Opacity < 1)
                 {
                     rectangle.Fill = Brushes.Gray;
                     rectangle.Opacity = 0.1;

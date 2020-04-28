@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PathFindingAlgorithms
 {
@@ -27,6 +28,8 @@ namespace PathFindingAlgorithms
                 //Iterate through neighboors
                 foreach (Node NeighboorNode in CurrentNode.Neighboors)
                 {
+                    if (NeighboorNode.Obstacle)
+                        continue;
                     if (algorithm == Algorithm.AStart)
                         UpdateNeighboorAStar(CurrentNode, NeighboorNode);
                     else if (algorithm == Algorithm.Dijkstra)
@@ -34,9 +37,35 @@ namespace PathFindingAlgorithms
                 }
 
                 //Pick next best unvisited node
-                CurrentNode = UnvisitedNodes.Dequeue();
+                try { CurrentNode = UnvisitedNodes.Dequeue(); }
+                catch (Exception)
+                {
+                    MessageBox.Show("No solution found. Make sure the endpoint is reachable.", "No Solution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    return;
+                }
+
+                //Mark it in canvas
+                if (CurrentNode != EndNode)
+                    Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Opacity = 0.5;
+                if (calculationMode == CalculationMode.Slow)
+                    Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay);
             }
 
+            CurrentNode = EndNode.PriorNode;
+            while (true)
+            {
+                if (CurrentNode == StartNode)
+                {
+                    break;
+                }
+                else
+                {
+                    Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Fill = Brushes.Green;
+                    if (calculationMode == CalculationMode.Slow)
+                        Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay / 2);
+                }
+                CurrentNode = CurrentNode.PriorNode;
+            }
             MessageBox.Show(EndNode.DistanceToStart.ToString());
         }
         private void UpdateNeighboorAStar(Node Current, Node Neighboor)
@@ -49,8 +78,6 @@ namespace PathFindingAlgorithms
 
             bool BetterScore;
             double DistanceToStart, DistnaceToEnd, GScore;
-
-            //Mark neighboor in canvas
 
             //Calculate new score
             BetterScore = false;
@@ -73,6 +100,12 @@ namespace PathFindingAlgorithms
             {
                 Neighboor.Found = true;
                 UnvisitedNodes.Enqueue(Neighboor, (float)Neighboor.Score);
+
+                //Mark node in canvas
+                if (Neighboor != EndNode)
+                    Rectangles[(int)Neighboor.X, (int)Neighboor.Y].Opacity = 0.3;
+                if (calculationMode == CalculationMode.Slow)
+                    Wait(Rectangles[(int)Neighboor.X, (int)Neighboor.Y], CalculationDelay);
             }
 
             //Update priority if new score is lower
@@ -117,7 +150,7 @@ namespace PathFindingAlgorithms
         {
             drawingMode = DrawingMode.Nothing;
             applicationMode = ApplicationMode.Algorithm;
-            Node.ConvertObstacleListInNodesArray(ObstacleNodes, AllNodes);
+            //Node.ConvertObstacleListInNodesArray(ObstacleNodes, AllNodes);
             Node.FindAllNeighboors(AllNodes);
 
             if (((MenuItem)sender).Name == MenuItemAStarAlgorithm.Name)
