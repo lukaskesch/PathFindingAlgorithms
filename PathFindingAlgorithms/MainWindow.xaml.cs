@@ -84,9 +84,10 @@ namespace PathFindingAlgorithms
             Map += Environment.NewLine + MaxY.ToString();
             Map += Environment.NewLine + StartNode.ToString();
             Map += Environment.NewLine + EndNode.ToString();
-            foreach (Node obstacle in ObstacleNodes)
+            foreach (Node node in AllNodes)
             {
-                Map += Environment.NewLine + obstacle.ToString();
+                if (node.IsObstacle)
+                    Map += Environment.NewLine + node.ToString();
             }
 
             if (menuItem.Name == MenuItemFileSaveAs.Name || FilePath == string.Empty)
@@ -111,7 +112,13 @@ namespace PathFindingAlgorithms
                 MessageBox.Show("Start and Endpoint are the same", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            else if (ObstacleNodes.Count == 0)
+            int NumberOfObstacles = 0;
+            foreach (Node node in AllNodes)
+            {
+                if (node.IsObstacle)
+                    NumberOfObstacles++;
+            }
+            if (NumberOfObstacles == 0)
             {
                 string title = "Continue ?";
                 string message = "You havn't set any obstacles. Do you still want to save the map?";
@@ -242,11 +249,13 @@ namespace PathFindingAlgorithms
                     MaxY = _MaxY;
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
                     Rectangles = FillRectangeArray();
+                    Labels = FillLabelArray();
                     applicationMode = ApplicationMode.Drawing;
                     CanvasPath.Children.Clear();
                     SetScale();
                     DrawCoordinateSystem();
                     UpdateRectangeArray();
+                    UpdateLabelArray();
                 }
             }
             catch (Exception)
@@ -400,17 +409,7 @@ namespace PathFindingAlgorithms
 
                 HandlePointAndRectangle(P);
 
-                //Label lable = new Label()
-                //{
-                //    Content = "5",
-                //    FontSize = 10,
-                //    Foreground = Brushes.Red
-                //    //Height = 50,
-                //    //Width = 50
-                //};
-                //Canvas.SetLeft(lable, P.X + 0.5 * CoordinateLineWidth);
-                //Canvas.SetTop(lable, P.Y - dy + 0.5 * CoordinateLineWidth);
-                //CanvasPath.Children.Add(lable);
+
             }
         }
         private void SetRectColor(MouseEventArgs e)
@@ -526,6 +525,7 @@ namespace PathFindingAlgorithms
                 CanvasPath.Children.Clear();
                 SetScale();
                 UpdateRectangeArray();
+                UpdateLabelArray();
                 DrawCoordinateSystem();
             }
         }
@@ -552,15 +552,33 @@ namespace PathFindingAlgorithms
                 }
             }
         }
+        private void UpdateLabelArray()
+        {
+            Point P;
+            Label label;
+
+
+            for (int i = 0; i < MaxX; i++)
+            {
+                for (int j = 0; j < MaxY; j++)
+                {
+                    P = new Point(i, j);
+                    label = Labels[i, j];
+
+                    PlotToCanvas(ref P);
+
+                    //label.Content = "2";
+                    Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
+                    Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
+
+                    CanvasPath.Children.Add(label);
+                }
+            }
+        }
         private void ResetArrayToBeforeAlgorithm()
         {
             foreach (Rectangle rectangle in Rectangles)
             {
-                //if ((rectangle.Fill == Brushes.Green || rectangle.Fill == Brushes.Red) && rectangle.Opacity != 1)
-                //{
-                //    rectangle.Fill = Brushes.Gray;
-                //    rectangle.Opacity = 0.1;
-                //}
                 if (rectangle.Opacity < 1)
                 {
                     rectangle.Fill = Brushes.Gray;
@@ -585,6 +603,19 @@ namespace PathFindingAlgorithms
             }
 
             return rectangles;
+        }
+        private Label[,] FillLabelArray()
+        {
+            Label[,] Labels = new Label[MaxX, MaxY];
+            for (int i = 0; i < MaxX; i++)
+            {
+                for (int j = 0; j < MaxY; j++)
+                {
+                    Labels[i, j] = new Label();
+
+                }
+            }
+            return Labels;
         }
         private void Wait(UIElement element, int CalculationDelay)
         {

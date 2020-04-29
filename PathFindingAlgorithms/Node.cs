@@ -35,7 +35,8 @@ namespace PathFindingAlgorithms
 
         public double GetDistanceBetween(Node node)
         {
-            return Math.Sqrt(Math.Pow(this.X - node.X, 2) + Math.Pow(this.Y - node.Y, 2));
+            //return Math.Sqrt(Math.Pow(this.X - node.X, 2) + Math.Pow(this.Y - node.Y, 2));
+            return Math.Abs(this.X - node.X) + Math.Abs(this.Y - node.Y);
         }
         public override string ToString()
         {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 
 namespace PathFindingAlgorithms
@@ -14,7 +15,7 @@ namespace PathFindingAlgorithms
     {
         //Nodes
         Node[,] AllNodes;
-        List<Node> ObstacleNodes = new List<Node>();
+        //List<Node> ObstacleNodes = new List<Node>();
         Node StartNode = new Node(-1, -1);
         Node EndNode;
 
@@ -40,6 +41,7 @@ namespace PathFindingAlgorithms
         DrawingMode drawingMode;
         enum EditMode { Preview, Final }
         EditMode editMode;
+        Label[,] Labels;
         Rectangle[,] Rectangles;
         Rectangle TempRect = new Rectangle();
         Rectangle Rect = new Rectangle();
