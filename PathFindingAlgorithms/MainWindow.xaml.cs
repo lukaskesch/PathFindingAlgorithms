@@ -247,12 +247,12 @@ namespace PathFindingAlgorithms
                 {
                     MaxX = _MaxX;
                     MaxY = _MaxY;
+                    SetScale();
                     AllNodes = Node.FillNodesArray(MaxX, MaxY);
                     Rectangles = FillRectangeArray();
                     Labels = FillLabelArray();
                     applicationMode = ApplicationMode.Drawing;
                     CanvasPath.Children.Clear();
-                    SetScale();
                     DrawCoordinateSystem();
                     UpdateRectangeArray();
                     UpdateLabelArray();
@@ -564,12 +564,18 @@ namespace PathFindingAlgorithms
                 {
                     P = new Point(i, j);
                     label = Labels[i, j];
-
                     PlotToCanvas(ref P);
 
-                    //label.Content = "2";
+                    string Content = label.Content.ToString();
+                    label.Content = "2";
+
                     Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
                     Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
+
+                    if (Content != null)
+                        label.Content = Content;
+                    else
+                        label.Content = string.Empty;
 
                     CanvasPath.Children.Add(label);
                 }
@@ -584,6 +590,10 @@ namespace PathFindingAlgorithms
                     rectangle.Fill = Brushes.Gray;
                     rectangle.Opacity = 0.1;
                 }
+            }
+            foreach (Label label in Labels)
+            {
+                label.Content = string.Empty;
             }
         }
         private Rectangle[,] FillRectangeArray()
@@ -612,7 +622,7 @@ namespace PathFindingAlgorithms
                 for (int j = 0; j < MaxY; j++)
                 {
                     Labels[i, j] = new Label();
-
+                    Labels[i, j].Content = string.Empty;
                 }
             }
             return Labels;
@@ -630,5 +640,9 @@ namespace PathFindingAlgorithms
 
         #endregion
 
+        private void MenuItemAlgorithmVisualization_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

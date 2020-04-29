@@ -12,6 +12,7 @@ namespace PathFindingAlgorithms
 {
     public partial class MainWindow : Window
     {
+        bool ShowAlgorithmScore;
         private void MenuItemAlgorithm_Click(object sender, RoutedEventArgs e)
         {
             MenuItemEdit_Click(sender, e);
@@ -79,6 +80,8 @@ namespace PathFindingAlgorithms
                 return;
             }
 
+            Label label;
+            Point P;
             bool BetterScore;
             double DistanceToStart, DistnaceToEnd, GScore;
 
@@ -97,7 +100,19 @@ namespace PathFindingAlgorithms
                 Neighboor.Score = GScore;
                 Neighboor.PriorNode = Current;
 
-                Labels[(int)Neighboor.X, (int)Neighboor.Y].Content = Math.Round(GScore * 100) / 100;
+                if (ShowAlgorithmScore)
+                {
+                    P = new Point(Neighboor.X, Neighboor.Y);
+                    PlotToCanvas(ref P);
+                    label = Labels[(int)Neighboor.X, (int)Neighboor.Y];
+                    //CanvasPath.Children.Remove(label);
+                    label.Content = Math.Round(GScore * 100) / 100;
+                    Wait(label, 0);
+                    Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
+                    Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
+                    //CanvasPath.Children.Add(label);
+                }
+
             }
             else if (algorithm == Algorithm.Dijkstra && Neighboor.DistanceToStart > DistanceToStart)
             {
@@ -105,7 +120,16 @@ namespace PathFindingAlgorithms
                 Neighboor.DistanceToStart = DistanceToStart;
                 Neighboor.PriorNode = Current;
 
-                Labels[(int)Neighboor.X, (int)Neighboor.Y].Content = DistanceToStart;
+                if (ShowAlgorithmScore)
+                {
+                    P = new Point(Neighboor.X, Neighboor.Y);
+                    PlotToCanvas(ref P);
+                    label = Labels[(int)Neighboor.X, (int)Neighboor.Y];
+                    label.Content = Math.Round(DistanceToStart * 100) / 100;
+                    Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
+                    Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
+                }
+
             }
 
             //Check if neighboor has been found yet
@@ -198,6 +222,14 @@ namespace PathFindingAlgorithms
             }
 
             StartNode.DistanceToStart = 0.0;
+
+            if (MenuItemShowAlgorithmScore.IsChecked)
+                ShowAlgorithmScore = true;
+            else
+                ShowAlgorithmScore = false;
+
+            RedrawCanvas();
+
         }
 
     }
