@@ -223,10 +223,10 @@ namespace PathFindingAlgorithms
 
             StartNode.DistanceToStart = 0.0;
 
-            if (MenuItemShowAlgorithmScore.IsChecked)
-                ShowAlgorithmScore = true;
-            else
-                ShowAlgorithmScore = false;
+            //if (MenuItemShowAlgorithmScore.IsChecked)
+            //    ShowAlgorithmScore = true;
+            //else
+            //    ShowAlgorithmScore = false;
 
             RedrawCanvas();
 

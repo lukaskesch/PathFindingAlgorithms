@@ -18,33 +18,45 @@
                     <MenuItem Name="MenuItemFileSaveAs" Header="Save As" Click="MenuItemFileSave_Click" IsEnabled="False"/>
                 </MenuItem>
                 <MenuItem Name="MenuItemEdit" Header="Edit" Click="MenuItemEdit_Click">
-                    <MenuItem Name="MenuItemAddObstacles" Header="Add Obstacles" IsCheckable="True" Checked="MenuItemAddObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
-                    <MenuItem Name="MenuItemRemoveObstacles" Header="Remove Obstacles" IsCheckable="True" Checked="MenuItemRemoveObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
                     <MenuItem Name="MenuItemSetStartpoint" Header="Set Startpoint" Click="MenuItemSetStartpoint_Click"/>
                     <MenuItem Name="MenuItemSetEndpoint" Header="Set Endpoint" Click="MenuItemSetEndpoint_Click"/>
+                    <MenuItem Name="MenuItemAddObstacles" Header="Add Obstacles" IsCheckable="True" Checked="MenuItemAddObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
+                    <MenuItem Name="MenuItemRemoveObstacles" Header="Remove Obstacles" IsCheckable="True" Checked="MenuItemRemoveObstacles_Checked" Unchecked="MenuItemObstacles_Unchecked"/>
+                    <MenuItem Name="MenuItemGridSettings" Header="Grid" Click="MenuItemGridSettings_Click"/>
+
                 </MenuItem>
-                <MenuItem Name="MenuItemSettings" Header="Settings" Click="MenuItemSettings_Click"/>
                 <MenuItem Name="MenuItemAlgorithms" Header="Algorithms" >
                     <MenuItem Name="MenuItemAStarAlgorithm" Header="A*" Click="MenuItemAlgorithm_Click"/>
                     <MenuItem Name="MenuItemDijkstraAlgorithm" Header="Dijkstra" Click="MenuItemAlgorithm_Click"/>
-                    <MenuItem Name="MenuItemShowAlgorithmScore" Header="Show Scores" IsCheckable="True" IsChecked="True"/>
-                    <MenuItem Name="MenuItemAlgorithmVisualization" Header="Visualization" IsCheckable="True" IsChecked="True" Click="MenuItemAlgorithmVisualization_Click"/>
+                    <MenuItem Name="MenuItemAlgorithmSettings" Header="Settings" Click="MenuItemAlgorithmSettings_Click"/>
                 </MenuItem>
             </Menu>
-            <GroupBox DockPanel.Dock="Top" Header="Settings" Margin="10" Name="GroupBoxSettings" Visibility="Collapsed">
+            <GroupBox DockPanel.Dock="Top" Header="Grid settings" Margin="10" Name="GroupBoxGridSettings" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
                     <Label Content="MaxX:"/>
                     <TextBox Name="TextBoxMaxX" Width="30" Height="20" Text="15"/>
                     <Label Content="MaxY:" Margin="10,0,0,0"/>
                     <TextBox Name="TextBoxMaxY" Width="30" Height="20" Text="10"/>
-                    <Label Content="Visualization:" Margin="50,0,0,0"/>
-                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True" Checked="CheckBoxVisualization_Checked" Unchecked="CheckBoxVisualization_Unchecked"/>
-                    <StackPanel Orientation="Horizontal" Name="StackPanelDelay">
+
+                    <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplySettings_Click"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox DockPanel.Dock="Top" Header="Algorithm settings" Margin="10" Name="GroupBoxAlgorithmSettings" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" Margin="10,5">
+                    <Label Content="Show inpected nodes:" />
+                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False"/>
+                    <Label Content="Show node scores:" Margin="30,0,0,0"/>
+                    <CheckBox Name="CheckBoxShowNodeScore" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False"/>
+                    <StackPanel Name="StackPanelCheckboxDelay" Orientation="Horizontal">
+                        <Label Content="Delay algorithm:" Margin="30,0,0,0"/>
+                        <CheckBox Name="CheckBoxDelayAlgorithm" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False" Checked="CheckBoxDelayAlgorithm_Checked" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Name="StackPanelDelay" Visibility="Collapsed">
                         <Label Content="Delay:" Margin="50,0,0,0"/>
-                        <TextBox Name="TextBoxDelay" Text="100" Width="30" Height="20"/>
+                        <TextBox Name="TextBoxDelay" Text="100" Width="30" Height="20" TextChanged="TextBoxDelay_TextChanged"/>
                         <Label Content="ms"/>
                     </StackPanel>
-                    <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplySettings_Click"/>
+                    <Button Name="ButtonSaveAlgorithmSettings" Content="Save" Margin="30,0,0,0" Height="22" Width="30" Click="ButtonSaveAlgorithmSettings_Click"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Algorithm" Margin="10" Name="GroupBoxAlgorithm" DockPanel.Dock="Top" Visibility="Collapsed">
@@ -53,6 +65,8 @@
                     <Label Content="" Name="LabelAlgorithmName" Padding="0,5"/>
                     <Label Content="Runtime:" Margin="30,0,0,0"/>
                     <Label Content="" Name="LabelRuntime" Padding="0,5"/>
+                    <Label Content="Distance:" Margin="30,0,0,0"/>
+                    <Label Content="" Name="LabelDistance" Padding="0,5"/>
 
                 </StackPanel>
             </GroupBox>

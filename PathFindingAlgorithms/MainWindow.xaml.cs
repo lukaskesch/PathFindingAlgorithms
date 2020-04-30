@@ -33,9 +33,9 @@ namespace PathFindingAlgorithms
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            GroupBoxSettings.Visibility = Visibility.Collapsed;
+            GroupBoxGridSettings.Visibility = Visibility.Collapsed;
             MenuItemEdit.IsEnabled = false;
-            MenuItemSettings.IsEnabled = false;
+            MenuItemGridSettings.IsEnabled = false;
             MenuItemAlgorithms.IsEnabled = false;
         }
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -48,8 +48,8 @@ namespace PathFindingAlgorithms
         #region File
         private void MenuItemFileCreate_Click(object sender, RoutedEventArgs e)
         {
-            MenuItemSettings.IsEnabled = true;
-            GroupBoxSettings.Visibility = Visibility.Visible;
+            MenuItemGridSettings.IsEnabled = true;
+            GroupBoxGridSettings.Visibility = Visibility.Visible;
         }
         private void MenuItemFileLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +68,7 @@ namespace PathFindingAlgorithms
 
             MenuItemFileSave.IsEnabled = true;
             MenuItemFileSaveAs.IsEnabled = true;
-            MenuItemSettings.IsEnabled = true;
+            MenuItemGridSettings.IsEnabled = true;
             MenuItemEdit.IsEnabled = true;
             MenuItemAlgorithms.IsEnabled = true;
 
@@ -213,24 +213,16 @@ namespace PathFindingAlgorithms
         #endregion
 
         #region Settings
-        private void MenuItemSettings_Click(object sender, RoutedEventArgs e)
+        private void MenuItemGridSettings_Click(object sender, RoutedEventArgs e)
         {
-            GroupBoxSettings.Visibility = Visibility.Visible;
+            GroupBoxGridSettings.Visibility = Visibility.Visible;
             MenuItemEdit_Click(sender, e);
         }
-        private void CheckBoxVisualization_Checked(object sender, RoutedEventArgs e)
-        {
-            if (StackPanelDelay != null)
-                StackPanelDelay.Visibility = Visibility.Visible;
-        }
-        private void CheckBoxVisualization_Unchecked(object sender, RoutedEventArgs e)
-        {
-            StackPanelDelay.Visibility = Visibility.Hidden;
-        }
+
         private void ButtonApplySettings_Click(object sender, RoutedEventArgs e)
         {
-            GroupBoxSettings.Visibility = Visibility.Collapsed;
-            Wait(GroupBoxSettings, 1);
+            GroupBoxGridSettings.Visibility = Visibility.Collapsed;
+            Wait(GroupBoxGridSettings, 1);
 
             try
             {
@@ -640,9 +632,44 @@ namespace PathFindingAlgorithms
 
         #endregion
 
-        private void MenuItemAlgorithmVisualization_Click(object sender, RoutedEventArgs e)
+
+
+
+        #region Algorithm
+        private void MenuItemAlgorithmSettings_Click(object sender, RoutedEventArgs e)
+        {
+            GroupBoxAlgorithmSettings.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBoxDelayAlgorithm_Checked(object sender, RoutedEventArgs e)
+        {
+            StackPanelCheckboxDelay.Visibility = Visibility.Collapsed;
+            StackPanelDelay.Visibility = Visibility.Visible;
+        }
+
+        private void TextBoxDelay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                int Delay = int.Parse(TextBoxDelay.Text);
+
+                if (Delay <= 0)
+                {
+                    StackPanelDelay.Visibility = Visibility.Collapsed;
+                    CheckBoxDelayAlgorithm.IsChecked = false;
+                    StackPanelCheckboxDelay.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+        private void ButtonSaveAlgorithmSettings_Click(object sender, RoutedEventArgs e)
         {
 
+            GroupBoxAlgorithmSettings.Visibility = Visibility.Collapsed;
         }
+        #endregion
     }
 }
