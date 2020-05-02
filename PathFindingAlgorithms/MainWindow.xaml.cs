@@ -216,14 +216,16 @@ namespace PathFindingAlgorithms
         private void MenuItemGridSettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxGridSettings.Visibility = Visibility.Visible;
+            Wait(GroupBoxGridSettings, 0);
+            RedrawCanvas();
             MenuItemEdit_Click(sender, e);
         }
 
         private void ButtonApplySettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxGridSettings.Visibility = Visibility.Collapsed;
-            Wait(GroupBoxGridSettings, 1);
-
+            Wait(GroupBoxGridSettings, 0);
+            RedrawCanvas();
             try
             {
                 int _MaxX, _MaxY;
@@ -624,6 +626,8 @@ namespace PathFindingAlgorithms
         private void MenuItemAlgorithmSettings_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxAlgorithmSettings.Visibility = Visibility.Visible;
+            Wait(GroupBoxAlgorithmSettings, 0);
+            RedrawCanvas();
         }
 
         private void CheckBoxDelayAlgorithm_Checked(object sender, RoutedEventArgs e)
@@ -652,9 +656,18 @@ namespace PathFindingAlgorithms
         }
         private void ButtonSaveAlgorithmSettings_Click(object sender, RoutedEventArgs e)
         {
-
             GroupBoxAlgorithmSettings.Visibility = Visibility.Collapsed;
+            Wait(GroupBoxAlgorithmSettings, 0);
+            RedrawCanvas();
+        }
+        private void ButtonCloseAlgorithmDetails_Click(object sender, RoutedEventArgs e)
+        {
+            GroupBoxAlgorithm.Visibility = Visibility.Collapsed;
+            Wait(GroupBoxAlgorithm, 0);
+            RedrawCanvas();
         }
         #endregion
+
+
     }
 }

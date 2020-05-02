@@ -44,7 +44,7 @@
             <GroupBox DockPanel.Dock="Top" Header="Algorithm settings" Margin="10" Name="GroupBoxAlgorithmSettings" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
                     <Label Content="Show inpected nodes:" />
-                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False"/>
+                    <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True"/>
                     <Label Content="Show node scores:" Margin="30,0,0,0"/>
                     <CheckBox Name="CheckBoxShowNodeScore" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False"/>
                     <StackPanel Name="StackPanelCheckboxDelay" Orientation="Horizontal">
@@ -60,14 +60,16 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Algorithm" Margin="10" Name="GroupBoxAlgorithm" DockPanel.Dock="Top" Visibility="Collapsed">
-                <StackPanel Orientation="Horizontal" Margin="10,5">
-                    <Label Content="Name:" />
-                    <Label Content="" Name="LabelAlgorithmName" Padding="0,5"/>
-                    <Label Content="Runtime:" Margin="30,0,0,0"/>
-                    <Label Content="" Name="LabelRuntime" Padding="0,5"/>
-                    <Label Content="Distance:" Margin="30,0,0,0"/>
-                    <Label Content="" Name="LabelDistance" Padding="0,5"/>
-
+                <StackPanel Orientation="Vertical" Margin="10,5">
+                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left">
+                        <Label Content="Name:" />
+                        <Label Content="" Name="LabelAlgorithmName" Padding="0,5"/>
+                        <Label Content="Runtime:" Margin="30,0,0,0"/>
+                        <Label Content="" Name="LabelRuntime" Padding="0,5"/>
+                        <Label Content="Distance:" Margin="30,0,0,0"/>
+                        <Label Content="" Name="LabelDistance" Padding="0,5"/>
+                        <Button Name="ButtonCloseAlgorithmDetails" Content="X" Width="20" Height="20" Margin="50,0,0,0" Padding="1" HorizontalAlignment="Right" Click="ButtonCloseAlgorithmDetails_Click"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
             <Canvas Name="CanvasPath" Margin="10" MouseLeftButtonDown="CanvasPath_MouseLeftButtonDown" MouseMove="CanvasPath_MouseMove"/>

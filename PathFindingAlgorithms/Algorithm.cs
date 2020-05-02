@@ -22,6 +22,8 @@ namespace PathFindingAlgorithms
 
             UnvisitedNodes = new SimplePriorityQueue<Node>();
 
+            stopwatch.Restart();
+
             //Algorithm
             Node CurrentNode = StartNode;
             while (CurrentNode != EndNode)
@@ -70,7 +72,9 @@ namespace PathFindingAlgorithms
                 }
                 CurrentNode = CurrentNode.PriorNode;
             }
-            MessageBox.Show(EndNode.DistanceToStart.ToString());
+            stopwatch.Stop();
+
+            PrintAlgorithmDetails();
         }
         private void UpdateNeighboorAStar(Node Current, Node Neighboor)
         {
@@ -161,7 +165,21 @@ namespace PathFindingAlgorithms
             if (IsDelay)
                 Wait(Rectangles[(int)node.X, (int)node.Y], CalculationDelay);
         }
+        private void PrintAlgorithmDetails()
+        {
+            if (algorithm == Algorithm.AStart)
+                LabelAlgorithmName.Content = "A*";
+            else if (algorithm == Algorithm.Dijkstra)
+                LabelAlgorithmName.Content = "Dijkstra";
 
+            LabelRuntime.Content = stopwatch.ElapsedMilliseconds.ToString() + "ms";
+
+            LabelDistance.Content = EndNode.DistanceToStart.ToString();
+
+            GroupBoxAlgorithm.Visibility = Visibility.Visible;
+            Wait(GroupBoxAlgorithm, 0);
+            RedrawCanvas();
+        }
         private bool CheckData()
         {
             MenuItemAddObstacles.IsChecked = false;
