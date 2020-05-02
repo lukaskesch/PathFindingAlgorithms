@@ -22,8 +22,8 @@ namespace PathFindingAlgorithms
         //Algorithm
         enum Algorithm { AStart, Dijkstra }
         Algorithm algorithm;
-        enum CalculationMode { Fast, Slow }
-        CalculationMode calculationMode;
+        //enum CalculationMode { Fast, Slow }
+        //CalculationMode calculationMode;
         int CalculationDelay;
         SimplePriorityQueue<Node> UnvisitedNodes;
 

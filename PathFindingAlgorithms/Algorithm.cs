@@ -12,17 +12,14 @@ namespace PathFindingAlgorithms
 {
     public partial class MainWindow : Window
     {
-        bool ShowAlgorithmScore;
+        bool ShowAlgorithmScore, ShowNodes, IsDelay;
         private void MenuItemAlgorithm_Click(object sender, RoutedEventArgs e)
         {
             MenuItemEdit_Click(sender, e);
 
-            if (!CheckData())
-            {
-                return;
-            }
+            if (!CheckData()) return;
+            if (!Prepare(sender)) return;
 
-            Prepare(sender);
             UnvisitedNodes = new SimplePriorityQueue<Node>();
 
             //Algorithm
@@ -48,9 +45,11 @@ namespace PathFindingAlgorithms
                 }
 
                 //Mark it in canvas
-                if (CurrentNode != EndNode)
+                if (CurrentNode != EndNode && ShowNodes)
                     Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Opacity = 0.7;
-                if (calculationMode == CalculationMode.Slow)
+
+                //Delay
+                if (IsDelay)
                     Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay);
             }
 
@@ -65,7 +64,8 @@ namespace PathFindingAlgorithms
                 else
                 {
                     Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Fill = Brushes.Green;
-                    if (calculationMode == CalculationMode.Slow)
+                    Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y].Opacity = 0.7;
+                    if (IsDelay)
                         Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay / 2);
                 }
                 CurrentNode = CurrentNode.PriorNode;
@@ -156,15 +156,17 @@ namespace PathFindingAlgorithms
         }
         private void MarkNodeInCanvas(Node node)
         {
-            if (node != EndNode)
+            if (node != EndNode && ShowNodes)
                 Rectangles[(int)node.X, (int)node.Y].Opacity = 0.4;
-            if (calculationMode == CalculationMode.Slow)
+            if (IsDelay)
                 Wait(Rectangles[(int)node.X, (int)node.Y], CalculationDelay);
         }
 
         private bool CheckData()
         {
-            //Check
+            MenuItemAddObstacles.IsChecked = false;
+            MenuItemRemoveObstacles.IsChecked = false;
+
             if (StartNode == null || EndNode == null)
             {
                 MessageBox.Show("Start and/or Endpoint is missing", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -196,7 +198,7 @@ namespace PathFindingAlgorithms
             }
             return true;
         }
-        private void Prepare(object sender)
+        private bool Prepare(object sender)
         {
             drawingMode = DrawingMode.Nothing;
             applicationMode = ApplicationMode.Algorithm;
@@ -223,13 +225,31 @@ namespace PathFindingAlgorithms
 
             StartNode.DistanceToStart = 0.0;
 
-            //if (MenuItemShowAlgorithmScore.IsChecked)
-            //    ShowAlgorithmScore = true;
-            //else
-            //    ShowAlgorithmScore = false;
+
+
+            if (CheckBoxDelayAlgorithm.IsChecked == true)
+            {
+                try
+                {
+                    CalculationDelay = int.Parse(TextBoxDelay.Text);
+                    IsDelay = true;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Delaytime isn't valid");
+                    return false;
+                }
+            }
+            else IsDelay = false;
+
+            if (CheckBoxVisualization.IsChecked == true) ShowNodes = true;
+            else ShowNodes = false;
+
+            if (CheckBoxShowNodeScore.IsChecked == true) ShowAlgorithmScore = true;
+            else ShowAlgorithmScore = false;
 
             RedrawCanvas();
-
+            return true;
         }
 
     }

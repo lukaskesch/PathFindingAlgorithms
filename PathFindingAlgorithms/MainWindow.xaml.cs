@@ -255,22 +255,7 @@ namespace PathFindingAlgorithms
                 MessageBox.Show("Coordinates are invalid");
             }
 
-            if (CheckBoxVisualization.IsChecked == true)
-            {
-                try
-                {
-                    CalculationDelay = int.Parse(TextBoxDelay.Text);
-                    calculationMode = CalculationMode.Slow;
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Delaytime isn't valid");
-                }
-            }
-            else
-            {
-                calculationMode = CalculationMode.Fast;
-            }
+
         }
         #endregion
 
