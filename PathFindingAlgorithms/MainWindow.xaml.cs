@@ -44,7 +44,6 @@ namespace PathFindingAlgorithms
         }
         #endregion
 
-
         #region File
         private void MenuItemFileCreate_Click(object sender, RoutedEventArgs e)
         {
@@ -256,11 +255,8 @@ namespace PathFindingAlgorithms
             {
                 MessageBox.Show("Coordinates are invalid");
             }
-
-
         }
         #endregion
-
 
         #region MenuItemsEdit
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
@@ -299,19 +295,19 @@ namespace PathFindingAlgorithms
         }
         #endregion
 
-
         #region Canvas
         private void CanvasPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             editMode = EditMode.Final;
-            EditPoint(e);
+
+            EditPoint(e, new Point(-1, -1));
         }
         private void CanvasPath_MouseMove(object sender, MouseEventArgs e)
         {
             editMode = EditMode.Preview;
-            EditPoint(e);
+            EditPoint(e, new Point(-1, -1));
         }
-        private void EditPoint(MouseEventArgs e)
+        private void EditPoint(MouseEventArgs e, Point P)
         {
             //Set old color
             Rect.Fill = TempRect.Fill;
@@ -327,8 +323,12 @@ namespace PathFindingAlgorithms
             }
 
             //Convert mouseposition
-            Point P = e.GetPosition(CanvasPath);
-            PlotToCoordinateSystem(ref P);
+            if (P.X == -1 && P.Y == -1)
+            {
+                P = e.GetPosition(CanvasPath);
+                PlotToCoordinateSystem(ref P);
+            }
+
 
             //Check if mouseposition is in bound
             if (P.X < 0 || P.X >= MaxX || P.Y < 0 || P.Y >= MaxY)
@@ -387,8 +387,6 @@ namespace PathFindingAlgorithms
                 TempRect.Opacity = 1;
 
                 HandlePointAndRectangle(P);
-
-
             }
         }
         private void SetRectColor(MouseEventArgs e)
@@ -618,9 +616,6 @@ namespace PathFindingAlgorithms
 
 
         #endregion
-
-
-
 
         #region Algorithm
         private void MenuItemAlgorithmSettings_Click(object sender, RoutedEventArgs e)

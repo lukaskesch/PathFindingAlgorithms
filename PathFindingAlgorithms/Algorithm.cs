@@ -55,6 +55,8 @@ namespace PathFindingAlgorithms
                     Wait(Rectangles[(int)CurrentNode.X, (int)CurrentNode.Y], CalculationDelay);
             }
 
+            stopwatch.Stop();
+
             //Final Path
             CurrentNode = EndNode.PriorNode;
             while (true)
@@ -72,7 +74,6 @@ namespace PathFindingAlgorithms
                 }
                 CurrentNode = CurrentNode.PriorNode;
             }
-            stopwatch.Stop();
 
             PrintAlgorithmDetails();
         }
@@ -111,7 +112,8 @@ namespace PathFindingAlgorithms
                     label = Labels[(int)Neighboor.X, (int)Neighboor.Y];
                     //CanvasPath.Children.Remove(label);
                     label.Content = Math.Round(GScore * 100) / 100;
-                    Wait(label, 0);
+                    if (IsDelay)
+                        Wait(label, 0);
                     Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
                     Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
                     //CanvasPath.Children.Add(label);
@@ -130,6 +132,8 @@ namespace PathFindingAlgorithms
                     PlotToCanvas(ref P);
                     label = Labels[(int)Neighboor.X, (int)Neighboor.Y];
                     label.Content = Math.Round(DistanceToStart * 100) / 100;
+                    if (IsDelay)
+                        Wait(label, 0);
                     Canvas.SetLeft(label, P.X + 0.5 * (dx - label.ActualWidth));
                     Canvas.SetTop(label, P.Y - dy + 0.5 * (dy - label.ActualHeight));
                 }
