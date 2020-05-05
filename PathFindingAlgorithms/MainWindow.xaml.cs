@@ -53,6 +53,7 @@ namespace PathFindingAlgorithms
         }
         private void MenuItemFileLoad_Click(object sender, RoutedEventArgs e)
         {
+
             string FileContent = ReadFile();
             if (FileContent == string.Empty)
             {
@@ -66,21 +67,22 @@ namespace PathFindingAlgorithms
                 return;
             }
 
-            MenuItemFileSave.IsEnabled = true;
-            MenuItemFileSaveAs.IsEnabled = true;
-            MenuItemGridSettings.IsEnabled = true;
-            MenuItemEdit.IsEnabled = true;
-            MenuItemAlgorithms.IsEnabled = true;
 
             MessageBox.Show(FileContent);
             try
             {
+                CanvasPath.Children.Clear();
+
+
                 //Grid
                 editMode = EditMode.Final;
                 string[] Input = Regex.Split(FileContent, Environment.NewLine);
                 TextBoxMaxX.Text = int.Parse(Input[0]).ToString();
                 TextBoxMaxY.Text = int.Parse(Input[1]).ToString();
+                MaxX = 0;
                 ButtonApplyCoordinates_Click(sender, e);
+
+                //Rectangles = FillRectangeArray();
 
                 //Start and Endpoint
                 editMode = EditMode.Final;
@@ -96,6 +98,14 @@ namespace PathFindingAlgorithms
                 }
 
                 drawingMode = DrawingMode.Nothing;
+
+                RedrawCanvas();
+                MenuItemFileSave.IsEnabled = true;
+                MenuItemFileSaveAs.IsEnabled = true;
+                MenuItemGridSettings.IsEnabled = true;
+                MenuItemEdit.IsEnabled = true;
+                MenuItemAlgorithms.IsEnabled = true;
+
             }
             catch (Exception)
             {
