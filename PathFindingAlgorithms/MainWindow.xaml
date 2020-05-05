@@ -38,7 +38,7 @@
                     <Label Content="MaxY:" Margin="10,0,0,0"/>
                     <TextBox Name="TextBoxMaxY" Width="30" Height="20" Text="10"/>
 
-                    <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplySettings_Click"/>
+                    <Button Name="ButtonApplyCoordinates" Content="Apply" Margin="40,0,0,0" Height="22" Width="40" Click="ButtonApplyCoordinates_Click"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox DockPanel.Dock="Top" Header="Algorithm settings" Margin="10" Name="GroupBoxAlgorithmSettings" Visibility="Collapsed">

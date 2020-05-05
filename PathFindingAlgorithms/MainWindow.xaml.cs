@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -72,6 +73,46 @@ namespace PathFindingAlgorithms
             MenuItemAlgorithms.IsEnabled = true;
 
             MessageBox.Show(FileContent);
+            try
+            {
+                //Grid
+                editMode = EditMode.Final;
+                string[] Input = Regex.Split(FileContent, Environment.NewLine);
+                TextBoxMaxX.Text = int.Parse(Input[0]).ToString();
+                TextBoxMaxY.Text = int.Parse(Input[1]).ToString();
+                ButtonApplyCoordinates_Click(sender, e);
+
+                //Start and Endpoint
+                editMode = EditMode.Final;
+                drawingMode = DrawingMode.SetStartpoint;
+                EditPoint(null, ConvertStringToPoint(Input[2]));
+                drawingMode = DrawingMode.SetEndpoint;
+                EditPoint(null, ConvertStringToPoint(Input[3]));
+
+                drawingMode = DrawingMode.AddObstacle;
+                for (int i = 4; i < Input.Length; i++)
+                {
+                    EditPoint(null, ConvertStringToPoint(Input[i]));
+                }
+
+                drawingMode = DrawingMode.Nothing;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("File is corrupt", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //return;
+                throw;
+            }
+
+        }
+        private Point ConvertStringToPoint(string s)
+        {
+            s = s.Replace('(', ' ');
+            s = s.Replace(")", "");
+            //MessageBox.Show(s);
+            string[] input = s.Split(';');
+
+            return new Point(int.Parse(input[0]), int.Parse(input[1]));
         }
         private void MenuItemFileSave_Click(object sender, RoutedEventArgs e)
         {
@@ -220,7 +261,7 @@ namespace PathFindingAlgorithms
             MenuItemEdit_Click(sender, e);
         }
 
-        private void ButtonApplySettings_Click(object sender, RoutedEventArgs e)
+        private void ButtonApplyCoordinates_Click(object sender, RoutedEventArgs e)
         {
             GroupBoxGridSettings.Visibility = Visibility.Collapsed;
             Wait(GroupBoxGridSettings, 0);
@@ -391,7 +432,7 @@ namespace PathFindingAlgorithms
         }
         private void SetRectColor(MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e != null && e.LeftButton == MouseButtonState.Pressed)
             {
                 editMode = EditMode.Final;
             }
