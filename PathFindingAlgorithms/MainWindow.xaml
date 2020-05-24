@@ -43,7 +43,7 @@
             </GroupBox>
             <GroupBox DockPanel.Dock="Top" Header="Algorithm settings" Margin="10" Name="GroupBoxAlgorithmSettings" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="10,5">
-                    <Label Content="Show inpected nodes:" />
+                    <Label Content="Show inspected nodes:" />
                     <CheckBox Name="CheckBoxVisualization" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True"/>
                     <Label Content="Show node scores:" Margin="30,0,0,0"/>
                     <CheckBox Name="CheckBoxShowNodeScore" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="False"/>
